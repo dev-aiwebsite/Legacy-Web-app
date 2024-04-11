@@ -1,56 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
     <title>Document</title>
     <link rel="stylesheet" href="style.css">
-    
+
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/emoji-mart@latest/dist/browser.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script> 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-    tailwind.config = {
-        corePlugins: {
-            preflight: false,
-            important: true,
-        },
-        theme: {
-            extend: {
-                colors: {
-                    'appred': {'400' : '#771A30'},
-                    'appgreen': {'200' : '#CCEAEB'},
-                    'appblue': {'400' : '#0C3A83'},
+    <script src="https://cdn.jsdelivr.net/npm/emoji-mart@latest/dist/browser.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            corePlugins: {
+                preflight: false,
+                important: true,
+            },
+            theme: {
+                extend: {
+                    colors: {
+                        'appred': { '400': '#771A30' },
+                        'appgreen': { '200': '#CCEAEB' },
+                        'appblue': { '400': '#0C3A83' },
 
+                    }
                 }
-            }
-        },
-    }
-</script>
-<style>
+            },
+        }
+    </script>
+    <style>
 
-</style>
+    </style>
 </head>
+
 <body class="m-0 font-sans">
-    <main class="p-10">
-        <div class="sm:hidden mobile_header mobile bg-appgreen-200">
+    <main class="flex flex-col min-h-screen">
+        <div class="mobile_header mobile bg-appgreen-200">
             <div class="flex items-center justify-center p-5">
-                <img class="w-1/2" src="https://raw.githubusercontent.com/dev-aiwebsite/Legacy-Web-app/main/Legacy%20Materials%20(9)%202.png" width="auto" height="auto">
+                <img class="w-1/2"
+                    src="https://raw.githubusercontent.com/dev-aiwebsite/Legacy-Web-app/main/Legacy%20Materials%20(9)%202.png"
+                    width="auto" height="auto">
                 <span class="font-medium text-[4vw]">CHALLENGE</span>
             </div>
         </div>
-        <section id="" class="sm:hidden">
+        <section id="" class="">
             <form id="register-form" class="flex flex-col items-center text-center p-8 gap-5" action="">
                 <h4 class="max-w-[70%] text-base">Welcome to the Adaptive Leadership Challenge</h4>
                 <div class="flex flex-col form-items gap-3 w-full">
                     <p class="font-medium text-base capitalize mb-0">Enter your company name</p>
                     <div class="form-field">
-                        <label class="*:bg-transparent *:border-none *:outline-none bg-stone-100 flex m-1 ring-1 ring-stone-200 rounded-lg" for="">
-                            <input class="w-full p-3" type="text" name="company_name">
+                        <label
+                            class="*:bg-transparent *:border-none *:outline-none bg-stone-100 flex m-1 ring-1 ring-stone-200 rounded-lg" "="">
+                            <input class=" w-full p-3" type="text" name="company_name">
                         </label>
                     </div>
                 </div>
@@ -58,97 +63,250 @@
                     <p class="font-medium text-base capitalize mb-0">Enter your names</p>
                     <div class="form-field">
                         <p class="font-medium text-left text-xs capitalize mb-2">Team member 1</p>
-                        <label class="*:bg-transparent *:border-none *:outline-none bg-stone-100 flex m-1 ring-1 ring-stone-200 rounded-lg" for="">
-                            <input class="w-full p-3" type="text" name="team_member[]">
+                        <label
+                            class="*:bg-transparent *:border-none *:outline-none bg-stone-100 flex m-1 ring-1 ring-stone-200 rounded-lg" "="">
+                            <input class=" w-full p-3" type="text" name="team_member[]">
                         </label>
                     </div>
                     <div class="form-field">
                         <p class="font-medium text-left text-xs capitalize mb-2">Team member 2</p>
-                        <label class="*:bg-transparent *:border-none *:outline-none bg-stone-100 flex m-1 ring-1 ring-stone-200 rounded-lg" for="">
-                            <input class="w-full p-3" type="text" name="team_member[]">
+                        <label
+                            class="*:bg-transparent *:border-none *:outline-none bg-stone-100 flex m-1 ring-1 ring-stone-200 rounded-lg" "="">
+                            <input class=" w-full p-3" type="text" name="team_member[]">
                         </label>
                     </div>
                 </div>
-     
-                <button class="bg-appblue-400 border-none font-medium min-w-40 p-3 rounded-lg text-white tracking-wider text-base" type="submit">Register</button>
+
+                <button
+                    class="bg-appblue-400 border-none capitalize font-bold min-w-40 px-7 py-2.5 rounded-xl text-base text-white tracking-wider"
+                    type="submit">Register</button>
             </form>
         </section>
 
-        <section class="hidden md:block">
+        <section class="flex flex-1 flex-col gap-10">
+                    <div class="flex flex-wrap gap-5 justify-center mt-10">
+                        <table class="border-collapse price text-stone-500">
+                            <thead class="text-stone-400 text-xs">
+                                <tr>
+                                    <th></th>
+                                    <th><span>Your</span> <span>price</span></th>
+                                    <th><span>x team<span> <span>price</span></span></span></th>
+                                </tr>
+                            </thead>
+                            <tbody class="*:*:border *:*:border-gray-300 sm:*:*:px-4 *:*:border-solid sm:*:*:py-2 *:*:p-2">
+                                <tr class="">
+                                    <td class="text-xs">Month 1</td>
+                                    <td>$20</td>
+                                    <td>$10</td>
+                                </tr>
+                                <tr class="">
+                                    <td class="text-xs">Month 2</td>
+                                    <td>$20</td>
+                                    <td>$30</td>
+                                </tr>
+                                <tr class="">
+                                    <td class="text-xs">Month 3</td>
+                                    <td>$10</td>
+                                    <td>$30</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr class="*:border *:border-gray-300 sm*:px-5 *:border-solid sm*:py-1 *:p-2">
+                                    <td colspan="3" class="font-medium text-base text-center">TOTAL</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <table class="border-collapse profit text-stone-500
+                        ">
+                            <thead class="text-stone-400 text-xs">
+                                <tr>
+                                    <th><span><span>Your</span>profit</span></th>
+                                    <th><span><span>x team<span>profit</span></span></span></th>
+                                </tr>
+                            </thead>
+                            <tbody class="*:*:border *:*:border-gray-300 sm:*:*:px-4 *:*:border-solid sm:*:*:py-2 *:*:p-1">
+                                <tr>
+                                    <td>$30k</td>
+                                    <td>$150k</td>
+                                </tr>
+                                <tr>
+                                    <td>$180k</td>
+                                    <td>$20k</td>
+                                </tr>
+                                <tr>
+                                    <td>$150k</td>
+                                    <td>$30k</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr class="*:border *:border-gray-300 sm*:px-5 *:border-solid sm*:py-1 *:p-2">
+                                    <td>$1.48m</td>
+                                    <td>$680k</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+        
+                    </div>
+                    <div class="h-fit bg-appgreen-200 flex flex-row gap-5 items-center justify-center p-2">
+                        <span class="font-medium text-xs">Select Your Preferred Price for Month X</span> <span class="font-medium text-xl timer">3:57</span>
+                    </div>
+                    <div class="">
+                        <form id="price-form" class="flex flex-col gap-10 items-center text-center" action="">
+        
+                            <div class="flex flex-col form-items gap-3 w-full">
+                                <div class="*-[label]:flex *-[label]:h-14 *-[label]:items-center *-[label]:justify-center *-[label]:ring-1 *-[label]:ring-stone-400 *-[label]:rounded-full *-[label]:w-14 *:*-[input]:hidden flex flex-row font-bold form-field gap-5 items-center justify-center text-stone-500">
+                                    <label class="has-[:checked]:bg-appred-400 has-[:checked]:shadow-lg has-[:checked]:text-white hover:cursor-pointer hover:ring-current hover:text-appred-400">
+                                        <input class="w-full p-3" type="radio" name="price" value="10" checked="">
+                                        $10
+                                    </label>
+                                    <label class="has-[:checked]:bg-appred-400 has-[:checked]:shadow-lg has-[:checked]:text-white hover:cursor-pointer hover:ring-current hover:text-appred-400">
+                                        <input class="w-full p-3" type="radio" name="price" value="20">
+                                        $20
+                                    </label>
+                                    <label class="has-[:checked]:bg-appred-400 has-[:checked]:shadow-lg has-[:checked]:text-white hover:cursor-pointer hover:ring-current hover:text-appred-400">
+                                        <input class="w-full p-3" type="radio" name="price" value="30&quot;">
+                                        $30
+                                    </label>
+                                </div>
+                            </div>
+        
+                            <button class="bg-appblue-400 border-none capitalize font-bold min-w-40 px-7 py-2.5 rounded-xl text-base text-white tracking-wider" type="submit">Submit price</button>
+                        </form>
+                    </div>
+        </section>
+
+        <section class=" p-10">
             <div class="flex mt-5">
-                <img class="flex-1 h-16 ml-auto o object-contain object-left w-1/4" src="https://raw.githubusercontent.com/dev-aiwebsite/Legacy-Web-app/main/Legacy%20Materials%20(9)%202.png" width="auto" height="auto" style="
-">
+                <div class="flex-1 ml-auto o object-contain object-left w-1/4"><img class="h-full max-w-[160px]"
+                        src="https://raw.githubusercontent.com/dev-aiwebsite/Legacy-Web-app/main/Legacy%20Materials%20(9)%202.png"
+                        width="auto" height="auto"></div>
                 <ul class="*:flex-1 *:p-6 *:py-5 *:ring-1 *:ring-stone-300 [&amp;>*.active]:text-white [&amp;>*:hover]:bg-appblue-400 [&amp;>*:hover]:cursor-pointer [&amp;>*:hover]:text-white [&amp;>.active]:bg-appblue-400 divide-x flex flex-1 gap-px list-none m-auto max-w-[400px] p-0 font-medium text-center text-stone-600">
                     <li data-trigger="pairs" class="active rounded-tl-lg">Pairs</li>
                     <li data-trigger="groups">Groups</li>
-                    <li data-grigger="leaderboard" class="rounded-tr-lg">Leaderboard</li>
+                    <li data-trigger="leaderboard" class="rounded-tr-lg">Leaderboard</li>
                 </ul>
                 <div class="flex-1 w-1/4"></div>
             </div>
             <div class="border border-solid border-stone-300 min-h-[50vh] mt-0 p-5 p-6 rounded-lg">
                 <div data-content="pairs" class="grid grid-cols-5 gap-10">
                     <div class="*:flex *:h-10 isolate relative w-full">
-                        <div class="bg-white capitalize font-medium items-center pl-1 relative text-lg z-10">Team john doe</div>
-                        <div class="-translate-x-4 -translate-y-1/2 absolute border-dashed border-px border-stone-400 top-1/2 w-5"></div>
+                        <div class="bg-white capitalize font-medium items-center pl-1 relative text-lg z-10">Team john
+                            doe</div>
+                        <div
+                            class="-translate-x-4 -translate-y-1/2 absolute border-dashed border-px border-stone-400 top-1/2 w-5">
+                        </div>
                         <div class="bg-white flex-col pl-4 relative text-sm z-10">
-                            <div class="bg-white pl-1 relative z-10">Ian Rafols</div><div class="-translate-x-4 -translate-y-1/2 absolute border-dashed border-px border-stone-400 h-1/2 top-1/2 w-5"></div>
-                        <div class="bg-white pl-1 relative z-10">Allaine Manansala</div></div>
+                            <div class="bg-white pl-1 relative z-10">Ian Rafols</div>
+                            <div
+                                class="-translate-x-4 -translate-y-1/2 absolute border-dashed border-px border-stone-400 h-1/2 top-1/2 w-5">
+                            </div>
+                            <div class="bg-white pl-1 relative z-10">Allaine Manansala</div>
+                        </div>
                     </div>
                     <div class="*:flex *:h-10 isolate relative w-full">
-                        <div class="bg-white capitalize font-medium items-center pl-1 relative text-lg z-10">Team john doe</div>
-                        <div class="-translate-x-4 -translate-y-1/2 absolute border-dashed border-px border-stone-400 top-1/2 w-5"></div>
+                        <div class="bg-white capitalize font-medium items-center pl-1 relative text-lg z-10">Team john
+                            doe</div>
+                        <div
+                            class="-translate-x-4 -translate-y-1/2 absolute border-dashed border-px border-stone-400 top-1/2 w-5">
+                        </div>
                         <div class="bg-white flex-col pl-4 relative text-sm z-10">
-                            <div class="bg-white pl-1 relative z-10">Ian Rafols</div><div class="-translate-x-4 -translate-y-1/2 absolute border-dashed border-px border-stone-400 h-1/2 top-1/2 w-5"></div>
-                        <div class="bg-white pl-1 relative z-10">Allaine Manansala</div></div>
+                            <div class="bg-white pl-1 relative z-10">Ian Rafols</div>
+                            <div
+                                class="-translate-x-4 -translate-y-1/2 absolute border-dashed border-px border-stone-400 h-1/2 top-1/2 w-5">
+                            </div>
+                            <div class="bg-white pl-1 relative z-10">Allaine Manansala</div>
+                        </div>
                     </div>
                     <div class="*:flex *:h-10 isolate relative w-full">
-                        <div class="bg-white capitalize font-medium items-center pl-1 relative text-lg z-10">Team john doe</div>
-                        <div class="-translate-x-4 -translate-y-1/2 absolute border-dashed border-px border-stone-400 top-1/2 w-5"></div>
+                        <div class="bg-white capitalize font-medium items-center pl-1 relative text-lg z-10">Team john
+                            doe</div>
+                        <div
+                            class="-translate-x-4 -translate-y-1/2 absolute border-dashed border-px border-stone-400 top-1/2 w-5">
+                        </div>
                         <div class="bg-white flex-col pl-4 relative text-sm z-10">
-                            <div class="bg-white pl-1 relative z-10">Ian Rafols</div><div class="-translate-x-4 -translate-y-1/2 absolute border-dashed border-px border-stone-400 h-1/2 top-1/2 w-5"></div>
-                        <div class="bg-white pl-1 relative z-10">Allaine Manansala</div></div>
+                            <div class="bg-white pl-1 relative z-10">Ian Rafols</div>
+                            <div
+                                class="-translate-x-4 -translate-y-1/2 absolute border-dashed border-px border-stone-400 h-1/2 top-1/2 w-5">
+                            </div>
+                            <div class="bg-white pl-1 relative z-10">Allaine Manansala</div>
+                        </div>
                     </div>
                     <div class="*:flex *:h-10 isolate relative w-full">
-                        <div class="bg-white capitalize font-medium items-center pl-1 relative text-lg z-10">Team john doe</div>
-                        <div class="-translate-x-4 -translate-y-1/2 absolute border-dashed border-px border-stone-400 top-1/2 w-5"></div>
+                        <div class="bg-white capitalize font-medium items-center pl-1 relative text-lg z-10">Team john
+                            doe</div>
+                        <div
+                            class="-translate-x-4 -translate-y-1/2 absolute border-dashed border-px border-stone-400 top-1/2 w-5">
+                        </div>
                         <div class="bg-white flex-col pl-4 relative text-sm z-10">
-                            <div class="bg-white pl-1 relative z-10">Ian Rafols</div><div class="-translate-x-4 -translate-y-1/2 absolute border-dashed border-px border-stone-400 h-1/2 top-1/2 w-5"></div>
-                        <div class="bg-white pl-1 relative z-10">Allaine Manansala</div></div>
+                            <div class="bg-white pl-1 relative z-10">Ian Rafols</div>
+                            <div
+                                class="-translate-x-4 -translate-y-1/2 absolute border-dashed border-px border-stone-400 h-1/2 top-1/2 w-5">
+                            </div>
+                            <div class="bg-white pl-1 relative z-10">Allaine Manansala</div>
+                        </div>
                     </div>
                     <div class="*:flex *:h-10 isolate relative w-full">
-                        <div class="bg-white capitalize font-medium items-center pl-1 relative text-lg z-10">Team john doe</div>
-                        <div class="-translate-x-4 -translate-y-1/2 absolute border-dashed border-px border-stone-400 top-1/2 w-5"></div>
+                        <div class="bg-white capitalize font-medium items-center pl-1 relative text-lg z-10">Team john
+                            doe</div>
+                        <div
+                            class="-translate-x-4 -translate-y-1/2 absolute border-dashed border-px border-stone-400 top-1/2 w-5">
+                        </div>
                         <div class="bg-white flex-col pl-4 relative text-sm z-10">
-                            <div class="bg-white pl-1 relative z-10">Ian Rafols</div><div class="-translate-x-4 -translate-y-1/2 absolute border-dashed border-px border-stone-400 h-1/2 top-1/2 w-5"></div>
-                        <div class="bg-white pl-1 relative z-10">Allaine Manansala</div></div>
+                            <div class="bg-white pl-1 relative z-10">Ian Rafols</div>
+                            <div
+                                class="-translate-x-4 -translate-y-1/2 absolute border-dashed border-px border-stone-400 h-1/2 top-1/2 w-5">
+                            </div>
+                            <div class="bg-white pl-1 relative z-10">Allaine Manansala</div>
+                        </div>
                     </div>
                     <div class="*:flex *:h-10 isolate relative w-full">
-                        <div class="bg-white capitalize font-medium items-center pl-1 relative text-lg z-10">Team john doe</div>
-                        <div class="-translate-x-4 -translate-y-1/2 absolute border-dashed border-px border-stone-400 top-1/2 w-5"></div>
+                        <div class="bg-white capitalize font-medium items-center pl-1 relative text-lg z-10">Team john
+                            doe</div>
+                        <div
+                            class="-translate-x-4 -translate-y-1/2 absolute border-dashed border-px border-stone-400 top-1/2 w-5">
+                        </div>
                         <div class="bg-white flex-col pl-4 relative text-sm z-10">
-                            <div class="bg-white pl-1 relative z-10">Ian Rafols</div><div class="-translate-x-4 -translate-y-1/2 absolute border-dashed border-px border-stone-400 h-1/2 top-1/2 w-5"></div>
-                        <div class="bg-white pl-1 relative z-10">Allaine Manansala</div></div>
+                            <div class="bg-white pl-1 relative z-10">Ian Rafols</div>
+                            <div
+                                class="-translate-x-4 -translate-y-1/2 absolute border-dashed border-px border-stone-400 h-1/2 top-1/2 w-5">
+                            </div>
+                            <div class="bg-white pl-1 relative z-10">Allaine Manansala</div>
+                        </div>
                     </div>
                     <div class="*:flex *:h-10 isolate relative w-full">
-                        <div class="bg-white capitalize font-medium items-center pl-1 relative text-lg z-10">Team john doe</div>
-                        <div class="-translate-x-4 -translate-y-1/2 absolute border-dashed border-px border-stone-400 top-1/2 w-5"></div>
+                        <div class="bg-white capitalize font-medium items-center pl-1 relative text-lg z-10">Team john
+                            doe</div>
+                        <div
+                            class="-translate-x-4 -translate-y-1/2 absolute border-dashed border-px border-stone-400 top-1/2 w-5">
+                        </div>
                         <div class="bg-white flex-col pl-4 relative text-sm z-10">
-                            <div class="bg-white pl-1 relative z-10">Ian Rafols</div><div class="-translate-x-4 -translate-y-1/2 absolute border-dashed border-px border-stone-400 h-1/2 top-1/2 w-5"></div>
-                        <div class="bg-white pl-1 relative z-10">Allaine Manansala</div></div>
+                            <div class="bg-white pl-1 relative z-10">Ian Rafols</div>
+                            <div
+                                class="-translate-x-4 -translate-y-1/2 absolute border-dashed border-px border-stone-400 h-1/2 top-1/2 w-5">
+                            </div>
+                            <div class="bg-white pl-1 relative z-10">Allaine Manansala</div>
+                        </div>
                     </div>
                     <div class="*:flex *:h-10 isolate relative w-full">
-                        <div class="bg-white capitalize font-medium items-center pl-1 relative text-lg z-10">Team john doe</div>
-                        <div class="-translate-x-4 -translate-y-1/2 absolute border-dashed border-px border-stone-400 top-1/2 w-5"></div>
+                        <div class="bg-white capitalize font-medium items-center pl-1 relative text-lg z-10">Team john
+                            doe</div>
+                        <div
+                            class="-translate-x-4 -translate-y-1/2 absolute border-dashed border-px border-stone-400 top-1/2 w-5">
+                        </div>
                         <div class="bg-white flex-col pl-4 relative text-sm z-10">
-                            <div class="bg-white pl-1 relative z-10">Ian Rafols</div><div class="-translate-x-4 -translate-y-1/2 absolute border-dashed border-px border-stone-400 h-1/2 top-1/2 w-5"></div>
-                        <div class="bg-white pl-1 relative z-10">Allaine Manansala</div></div>
+                            <div class="bg-white pl-1 relative z-10">Ian Rafols</div>
+                            <div
+                                class="-translate-x-4 -translate-y-1/2 absolute border-dashed border-px border-stone-400 h-1/2 top-1/2 w-5">
+                            </div>
+                            <div class="bg-white pl-1 relative z-10">Allaine Manansala</div>
+                        </div>
                     </div>
                 </div>
                 <div data-content="groups">
-
+                    <h1>groups</h1>
                 </div>
                 <div data-content="leaderboard">
-
+                    <h1>Leaderboard</h1>
                 </div>
             </div>
         </section>
@@ -157,12 +315,26 @@
     </main>
 
 
-<script>
-    $ = jQuery.noConflict();
-    $(document).ready(function(){
-        $('#register-form label').addClass('*:bg-transparent *:border-none *:outline-none bg-stone-100 flex m-1 ring-1 ring-stone-200 rounded-lg')
-        $('#register-form input').addClass('p-3')
-    })
-</script>
+    <script>
+        $ = jQuery.noConflict();
+        $(document).ready(function () {
+            $('#register-form label').addClass('*:bg-transparent *:border-none *:outline-none bg-stone-100 flex m-1 ring-1 ring-stone-200 rounded-lg')
+            $('#register-form input').addClass('p-3')
+
+            $(document).on('click', '[data-trigger]', function(e){
+                e.preventDefault()
+                let value = $(this).attr('data-trigger')
+                let $content_container = $(`[data-content="${value}"]`)
+                $('[data-trigger]').removeClass('active')
+                $(this).addClass('active')
+                $('[data-content]').addClass('hidden')
+                $content_container.removeClass('hidden')
+                
+            })
+
+
+        })
+    </script>
 </body>
+
 </html>
