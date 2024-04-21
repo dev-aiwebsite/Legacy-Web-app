@@ -70,7 +70,7 @@
                         alert('Registration successfull')
                         $('#registration_section').addClass('hidden')
                         $('#price_section').removeClass('hidden')
-                        localStorage['lwa_team_id'] = res.data.TEAMS.ID
+                        localStorage['lwa_team_id'] = res.data.ID
 
                     } else {
                         alert('something went wrong')
