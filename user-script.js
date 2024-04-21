@@ -108,9 +108,18 @@
                         console.log(res)
                         DB.TEAMS = res.db
                         if (res.success) {
+
                             updatePriceList(DB)
                             alert('update successfull')
                             $this[0].reset()
+
+                                let prices = jsonParse(res.data.PRICE)
+                            if(prices.length) {
+                                if(prices.length == 3 || prices.length == 7) {
+                                    $this.addClass('_loading')
+                                }
+                            }
+
                         } else {
                             alert('something went wrong')
                         }
@@ -247,19 +256,19 @@
                 let current_stage_data = data.find(i => i.STAGE == current_stage)
                 let isStarted = current_stage_data.START ? true : false
                 if(isStarted){
-                    $('#price_section')?.removeClass('_loading')
+                    $('#price_section form')?.removeClass('_loading')
                 } else {
-                    $('#price_section')?.addClass('_loading')
+                    $('#price_section form')?.addClass('_loading')
                 }
 
            } else {
                 let current_stage_data = data.find(i => i.STAGE == 1)
                     let isStarted = current_stage_data.START ? true : false
                     if(isStarted){
-                        $('#price_section')?.removeClass('_loading')
+                        $('#price_section form')?.removeClass('_loading')
                         localStorage['lwp_current_stage'] = 1
                     } else {
-                        $('#price_section')?.addClass('_loading')
+                        $('#price_section form')?.addClass('_loading')
                     }
            }
         }
