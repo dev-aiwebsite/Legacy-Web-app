@@ -222,7 +222,7 @@
         function checkStage(db){
             let data = db.STAGES
             let team_id = localStorage['lwa_team_id']
-            let price = jsonParse(db.TEAMS.find(i => i.ID == team_id).PRICE)
+            let price = jsonParse(db.TEAMS.find(i => i.ID == team_id)?.PRICE)
             
             if(!price || price.length < 4){
                 localStorage['lwp_current_stage'] = 1
