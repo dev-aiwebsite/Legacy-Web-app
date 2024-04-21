@@ -166,14 +166,17 @@ function updateTeamData(db){
     console.log('update team data')
     team_price_profit = []
     
-    let pair_ids = [...new Set( db.TEAMS.map(i => {
-        i.PAIR != ""
-        return i.PAIR
-    }) ) ]
+    let pair_ids = []
+    db.TEAMS.forEach(i => {
+        if(i.PAIR != "" && !pair_ids.includes(i.ID)){
+            pair_ids.push(i.PAIR)
+        }
+    })
+
     pair_ids.forEach(pair_id => {
 
         let pair_data = {
-            pair_id: pair_id,
+            'pair_id': pair_id,
             teams: [
                 {
                     team_id: "",
@@ -192,13 +195,12 @@ function updateTeamData(db){
             winner: "", //team_id
         }
 
-
         let teams_data = db.TEAMS.filter(i => i.PAIR == pair_id)
         let team_1 = teams_data[0]
         let team_2 = teams_data[1]            
 
-        let team_1_price_array = jsonParse(team_1.PRICE)
-        let team_2_price_array = jsonParse(team_2.PRICE)
+        let team_1_price_array = jsonParse(team_1.PRICE) || ""
+        let team_2_price_array = jsonParse(team_2.PRICE) || ""
 
         let team_1_profit_array = []
         let team_2_profit_array = []
