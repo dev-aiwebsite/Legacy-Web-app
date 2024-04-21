@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-    <title>Legacy</title>
+    <title>LEGACY</title>
     <link rel="stylesheet" href="style.css">
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -92,7 +92,7 @@
     content: "";
 }
 
-section#price_section._loading:before {
+section#price_section form._loading:before {
     content: "Waiting for the round to start..";
     text-align: center;
     background: #fff;
@@ -101,12 +101,12 @@ section#price_section._loading:before {
     justify-content: center;
 }
 
-section#price_section._loading:after {
+section#price_section form._loading:after {
     border-color: blue;
     translate: -50% 100%;
 }
 
-section#price_section._loading > div {
+section#price_section form._loading > div {
     display: none;
 }
     </style>
@@ -152,7 +152,7 @@ section#price_section._loading > div {
                 </form>
             </section>
     
-            <section id="price_section" class="hidden _loading min-h-40 flex flex-1 flex-col gap-10">
+            <section id="price_section" class="hidden min-h-40 flex flex-1 flex-col gap-10">
                         <div class="flex flex-wrap gap-5 justify-center mt-10">
                             <table class="border-collapse price text-stone-500">
                                 <thead class="text-stone-400 text-xs">
@@ -179,7 +179,7 @@ section#price_section._loading > div {
                             <span class="font-medium text-xs">Select Your Preferred Price for Month X</span> <span class="font-medium text-xl timer">3:57</span>
                         </div>
                         <div class="">
-                            <form id="price-form" class="max-w-[600px] m-auto flex flex-col gap-10 items-center text-center" action="">
+                            <form id="price-form" class="_loading max-w-[600px] m-auto flex flex-col gap-10 items-center text-center" action="">
             
                                 <div class="flex flex-col form-items gap-3 w-full">
                                     <div class="*-[label]:flex *-[label]:h-14 *-[label]:items-center *-[label]:justify-center *-[label]:ring-1 *-[label]:ring-stone-400 *-[label]:rounded-full *-[label]:w-14 *:*-[input]:hidden flex flex-row font-bold form-field gap-5 items-center justify-center text-stone-500">
