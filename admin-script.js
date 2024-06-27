@@ -275,6 +275,8 @@ function syncApp(delay = 1000){
         fetch(app_api + '?action=readall', {method: 'GET'})
         .then(r => r.json())
         .then(res => {
+            DB = res
+
             let old_group = []
             let old_ids = DB.TEAMS.map(i => {
 
@@ -297,15 +299,15 @@ function syncApp(delay = 1000){
                 }
             })
 
-            if(new_pair.length){
-                renderPair(new_pair)
-            }
+    
+            renderPair(DB)
+            
 
             if(new_group.length){
                 renderGroup(new_group)
             }
 
-            DB = res
+           
             updateTeamData(DB)
         })
     }
@@ -318,12 +320,14 @@ function isInArray(array,toCheck){
     return index != -1 
 }
 
-function renderPair(db){       
+function renderPair(db){     
+    $('[data-content="pairs"]').html("");  
+    if(!db.TEAMS.length) return
     db.TEAMS.forEach(group => {
         let participants = jsonParse(group.PARTICIPANTS)
         if(!participants) return
 
-        let template = ` <div class="*:flex *:h-10 isolate relative w-full">
+        let template = ` <div data-pair class="*:flex *:h-10 isolate relative w-full">
             <div class="bg-white capitalize font-medium items-center pl-1 relative sm:text-lg text-sm z-10">${group.COMPANY}</div>
             <div
                 class="-translate-x-4 -translate-y-1/2 absolute border-dashed border-px border-stone-400 top-1/2 w-5">
