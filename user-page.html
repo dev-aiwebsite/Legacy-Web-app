@@ -34,6 +34,16 @@
         }
     </script>
     <style>
+        body.registration_phase, .before_start_loader {
+            background-image: url("https://raw.githubusercontent.com/dev-aiwebsite/Legacy-Web-app/main/9f8edb851efd5c67a2e4a2b84121926f.webp");
+            background-position:50% 100%;
+            box-sizing: border-box;
+        }
+
+        body:not(.registration_phase) .main_header {
+            background-color:#cceaeb;
+        }
+
 /* button loading */
 ._loading {
   pointer-events: none;
@@ -101,6 +111,11 @@ section#price_section form._loading:before {
     justify-content: center;
 }
 
+section#price_section form.end._loading:before {
+    content: "All round has ended";
+
+}
+
 section#price_section form._loading:after {
     border-color: blue;
     translate: -50% 100%;
@@ -113,19 +128,27 @@ section#price_section form._loading > div {
 </head>
 
 <body class="m-0 font-sans">
+    <div class="z-[10] inset-0 fixed w-screen h-screen before_start_loader flex flex-col items-center ">
+        
+        <div class="mt-40 flex items-center justify-center p-5">
+            <img class="max-w-[200px]" src="https://growthrxtools.com/wp-content/uploads/2022/09/logo-grxtools.png" width="auto" height="auto">
+        </div>
+        
+        <h4 class="px-20 text-center font-medium text-base">You are now registered. Please wait for Jade to start the challenge...</h4>
+        
+    </div>
     <main class="flex flex-col min-h-screen">
-        <div class="bg-appgreen-200">
+        <div class="main_header">
             <div class="flex items-center justify-center p-5">
-                <img class="max-w-[200px] w-1/2" src="https://raw.githubusercontent.com/dev-aiwebsite/Legacy-Web-app/main/Legacy%20Materials%20(9)%202.png" width="auto" height="auto">
-                <span class="font-medium md:text-3xl text-[4vw]">CHALLENGE</span>
+                <img class="max-w-[200px] w-1/2" src="https://growthrxtools.com/wp-content/uploads/2022/09/logo-grxtools.png" width="auto" height="auto">
             </div>
         </div>
-        <div class="participant _loading min-h-40">
+        <div class="participant _loading min-h-40 p-2">
             <section id="registration_section" class="hidden min-h-40">
                 <form id="register-form" class="max-w-[600px] m-auto flex flex-col items-center text-center p-8 gap-5" action="">
                     <h4 class="max-w-[70%] text-base">Welcome to the Adaptive Leadership Challenge</h4>
                     <div class="flex flex-col form-items gap-3 w-full">
-                        <p class="font-medium text-base capitalize mb-0">Enter your company name</p>
+                        <p class="font-medium text-base capitalize mb-0">Nominate a company name</p>
                         <div class="form-field">
                             <label class="*:bg-transparent *:border-none *:outline-none bg-stone-100 flex m-1 ring-1 ring-stone-200 rounded-lg">
                                 <input class="w-full p-3" type="text" name="company_name">
@@ -158,11 +181,11 @@ section#price_section form._loading > div {
                                 <thead class="text-stone-400 text-xs">
                                     <tr class="*:px-2">
                                         <th></th>
-                                        <th><span>Your price</span></th>
-                                        <th><span>x team price</span></span></th>
+                                        <th><span class="your_team_name">Your</span> <span>price</span></th>
+                                        <th><span class="x_team_name">x team</span> <span>price</span></th>
                                         <th class="!border-none"></th>
-                                        <th><span>Your profit</span></th>
-                                        <th><span>x team profit</span></th>
+                                        <th><span class="your_team_name">Your</span> <span>profit</span></th>
+                                        <th><span class="x_team_name">x team</span> <span>profit</span></th>
                                     </tr>
                                 </thead>
                                 <tbody class="*:*:border *:*:border-gray-300 sm:*:*:px-4 *:*:border-solid sm:*:*:py-2 *:*:p-2">
@@ -175,8 +198,12 @@ section#price_section form._loading > div {
 
             
                         </div>
-                        <div class="h-fit bg-appgreen-200 flex flex-row gap-5 items-center justify-center p-2">
-                            <span class="font-medium text-xs">Select Your Preferred Price for Month X</span> <span class="font-medium text-xl timer">3:57</span>
+                        <div class="h-fit bg-appgreen-200 flex flex-row gap-5 items-center justify-center p-2 timer-wrapper">
+                            <div class="flex flex-col">
+                                <span class="font-medium text-xs">Select Your Preferred Price for Month <span class="current_month">X</span></span> <span class="current"></span>
+                                <span></span>
+                            </div>
+                            <span class="font-medium text-xl timer">-:--</span>
                         </div>
                         <div class="">
                             <form id="price-form" class="_loading max-w-[600px] m-auto flex flex-col gap-10 items-center text-center" action="">
