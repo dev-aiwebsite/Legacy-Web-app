@@ -74,6 +74,7 @@ $(document).ready(function () {
                 $('#price_section').removeClass('hidden')
                 localStorage['lwa_team_id'] = res.data.ID
                 $('body').removeClass('registration_phase')
+                $('.before_start_loader').removeClass('hidden')
 
             } else {
                 alert('something went wrong')
@@ -293,7 +294,7 @@ function checkStage(db){
         
         entryCount = entryCount<= 8 ? entryCount : 8
         
-        console.log(entryCount, mustBeLengthOfPrice)
+        
         if( entryCount < mustBeLengthOfPrice){
             $('#price_section form')?.removeClass('_loading')
             $('.before_start_loader').addClass('hidden')
