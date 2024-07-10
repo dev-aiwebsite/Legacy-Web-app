@@ -91,27 +91,37 @@
 .currency:empty:before {
     content: "";
 }
+body {
+        background-image: url("https://raw.githubusercontent.com/dev-aiwebsite/Legacy-Web-app/main/9f8edb851efd5c67a2e4a2b84121926f.webp");
+    
+    }
+
+    [data-content="leaderboard"] .team-container table td{
+        padding: 10px;
+        border: solid 1px #ddd;
+    }
     </style>
 </head>
 
 <body class="m-0 font-sans">
     <main class="flex flex-col min-h-screen">
-        <section class="p-2 sm:p-10">
+        <section class="flex flex-col h-screen p-2 sm:p-10 box-border">
             <div class="flex flex-col mt-5 sm:flex-row">
-                <div class="flex-1 o object-contain object-left sm:ml-auto w-1/4">
-                    <img class="h-full max-w-[160px]"
-                        src="https://raw.githubusercontent.com/dev-aiwebsite/Legacy-Web-app/main/Legacy%20Materials%20(9)%202.png"
+                <div class="flex items-center flex-1 o object-contain object-left sm:ml-auto w-1/4">
+                    <img class="max-w-[160px]"
+                        src="https://growthrxtools.com/wp-content/uploads/2022/09/logo-grxtools.png"
                         width="auto" height="auto">
                 </div>
-                <ul class="*:flex-1 *:p-2 *:ring-1 *:ring-stone-300 *:select-none [&>*.active]:text-white [&>*:hover]:bg-appblue-400 [&>*:hover]:cursor-pointer [&>*:hover]:text-white [&>.active]:bg-appblue-400 divide-x flex flex-1 font-medium gap-px list-none m-auto max-w-[400px] p-0 sm:*:p-6 sm:*:py-5 sm:text-base text-center text-sm text-stone-600">
+                <ul class="*:bg-white *:flex-1 *:p-2 *:ring-1 *:ring-stone-300 *:select-none [&>*.active]:text-white [&>*:hover]:bg-appblue-400 [&>*:hover]:cursor-pointer [&>*:hover]:text-white [&>.active]:bg-appblue-400 divide-x flex flex-1 font-medium gap-px list-none m-auto max-w-[400px] p-0 sm:*:p-6 sm:*:py-5 sm:text-base text-center text-sm text-stone-600">
                     <li data-trigger="pairs" class="rounded-tl-lg active">Pairs</li>
                     <li data-trigger="groups" class="">Groups</li>
                     <li data-trigger="leaderboard" class="rounded-tr-lg">Leaderboard</li>
                 </ul>
-                <div class="flex-1 w-1/4"></div>
+                <div class="flex-1 w-1/4 toolbar flex">
+                </div>
             </div>
     
-            <div id="content-wrapper" class="flex border border-solid border-stone-300 min-h-[50vh] mt-0 p-5 p-6 rounded-lg">
+            <div id="content-wrapper" class="flex-1 bg-white flex border border-solid border-stone-300 min-h-[50vh] mt-0 p-6 md:p-20 rounded-lg">
                 <div data-content="pairs" class="h-fit gap-10 grid grid-cols-2 md:grid-cols-5 sm:grid-cols-4">
 
                 </div>
@@ -122,15 +132,32 @@
                     </div>
                 </div>
                 <div data-content="leaderboard" class="hidden flex-1">
-                    <div class="mb-4 text-center">
-                        <select>
-                            <option value="all">All</option>
-                            <option value="team">Per Team</option>
-                        </select>
+                    <div class="flex justify-center mb-4 text-center gap-5">
+                        <div class="grid grid-cols-2 gap-0 *:ring-1 *:ring-inset *:ring-gray-300 cursor-pointer">
+                            <label class="block has-[:checked]:ring-appred-400 has-[:checked]:text-white has-[:checked]:bg-appred-400 p-2 box-border">
+                                <input class="hidden" type="radio" name="leaderboard_type" value="all" checked>
+                                <span class="">All</span>
+                            </label>
+                            <label class="block has-[:checked]:ring-appred-400 has-[:checked]:text-white has-[:checked]:bg-appred-400 p-2 box-border">
+                                <input class="hidden" type="radio" name="leaderboard_type" value="per_team">
+                                <span class="">Per Team</span>
+                            </label>
+                        </div>
+          
                         <input type="search" name="group_pair" id="" placeholder="Search">
                     </div>
-                    <div>
+                    <div class=>
                         <div class="flex-1 gap-10 grid grid-cols-2 group-container h-full lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3">
+                        </div>
+                        <div class="hidden team-container">
+                            <table>
+                                <thead>
+                                    <th></th>
+                                    <th>Team name</th>
+                                    <th>Current profit</th>
+                                </thead>
+                               
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -142,19 +169,15 @@
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"></path>
             </svg></button>
             <div class="dialog-body">
-                <div class="legend-wrapper">
-                    <p class="mb-0 mt-0 text-sm text-stone-600">Team 1 : <span class="capitalize font-medium team_1_name text-stone-700"></span></p>
-                    <p class="mt-0 text-sm text-stone-600">Team 2 : <span class="capitalize font-medium team_2_name text-stone-700"></span></p>
-                </div>
                 <table class="border-collapse price text-stone-500">
                     <thead class="text-stone-400 text-xs">
                         <tr class="*:px-2">
                             <th></th>
-                            <th><span>Team 1 price</span></th>
-                            <th><span>Team 2 price</span></span></th>
+                            <th><span class="team_1_name">Team 1</span><span> price</span></th>
+                            <th><span class="team_2_name">Team 2</span><span> price</span></span></th>
                             <th class="!border-none"></th>
-                            <th><span>Team 1 profit</span></th>
-                            <th><span>Team 2 profit</span></th>
+                            <th><span class="team_1_name">Team 1</span><span> profit</span></th>
+                            <th><span class="team_2_name">Team 2</span><span> profit</span></th>
                         </tr>
                     </thead>
                     <tbody class="*:*:border *:*:border-gray-300 sm:*:*:px-4 *:*:border-solid sm:*:*:py-2 *:*:p-2">
