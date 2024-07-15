@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title>Legacy - admin</title>
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/emoji-mart@latest/dist/browser.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="admin-script.js"></script>
+    <script>
+        tailwind.config = {
+            corePlugins: {
+                preflight: false,
+                important: true,
+            },
+            theme: {
+                extend: {
+                    colors: {
+                        'appred': { '300' : '#B2265C','400': '#771A30' },
+                        'appgreen': { '200': '#CCEAEB' },
+                        'appblue': { '400': '#0C3A83' },
+
+                    }
+                }
+            },
+        }
+    </script>
+    <style>
+/* button loading */
+._loading {
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.5;
+  position: relative;
+}
+._loading:after {
+  content: "";
+  position: absolute;
+  aspect-ratio: 1;
+  width: 1em;
+  height: auto;
+  background: inherit;
+  border: solid 2px #0C3A83;
+  border-radius: 50em;
+  border-right: transparent;
+  border-top: transparent;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  animation: loadingSpin 1s linear infinite;
+}
+
+._loading:before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  background: inherit;
+  text-align: start;
+  height: 100%;
+  inset: 0;
+  border-radius: inherit;
+}
+
+@keyframes loadingSpin {
+  to {
+    rotate: 360deg;
+  }
+}
+
+.participant._loading:after {
+    border-color: #0C3A83;
+}
+
+.currency{
+    position: relative;
+    width: 100%;
+    text-align: center;
+    display: inline-block;
+}
+.currency:before {
+    content: "$";
+}
+.currency:empty:before {
+    content: "";
+}
+body {
+        background-image: url("https://raw.githubusercontent.com/dev-aiwebsite/Legacy-Web-app/main/9f8edb851efd5c67a2e4a2b84121926f.webp");
+    
+    }
+
+    [data-content="leaderboard"] .team-container table td{
+        padding: 10px;
+        border: solid 1px #ddd;
+    }
+    </style>
+</head>
+
+<body class="m-0 font-sans">
+    <main class="flex flex-col min-h-screen">
+        <section class="flex flex-col h-screen p-2 sm:p-10 box-border">
+            <div class="flex flex-col mt-5 sm:flex-row">
+                <div class="flex items-center flex-1 o object-contain object-left sm:ml-auto w-1/4">
+                    <img class="max-w-[160px]"
+                        src="https://growthrxtools.com/wp-content/uploads/2022/09/logo-grxtools.png"
+                        width="auto" height="auto">
+                </div>
+                <ul class="*:bg-white *:flex-1 *:p-2 *:ring-1 *:ring-stone-300 *:select-none [&>*.active]:text-white [&>*:hover]:bg-appblue-400 [&>*:hover]:cursor-pointer [&>*:hover]:text-white [&>.active]:bg-appblue-400 divide-x flex flex-1 font-medium gap-px list-none m-auto max-w-[400px] p-0 sm:*:p-6 sm:*:py-5 sm:text-base text-center text-sm text-stone-600">
+                    <li data-trigger="pairs" class="rounded-tl-lg active">Pairs</li>
+                    <li data-trigger="groups" class="">Groups</li>
+                    <li data-trigger="leaderboard" class="rounded-tr-lg">Leaderboard</li>
+                </ul>
+                <div class="flex-1 w-1/4 toolbar flex">
+                </div>
+            </div>
+    
+            <div id="content-wrapper" class="flex-1 bg-white flex border border-solid border-stone-300 min-h-[50vh] mt-0 p-6 md:p-20 rounded-lg">
+                <div data-content="pairs" class="h-fit gap-10 grid grid-cols-2 md:grid-cols-5 sm:grid-cols-4">
+
+                </div>
+                <div data-content="groups" class="hidden flex flex-1 items-center justify-center">
+                    <button data-action="match_pair" type="button" class="bg-appred-400 border-none cursor-pointer font-medium hover:ring-1 hover:ring-appred-400 hover:ring-offset-2 min-w-60 px-6 py-3 rounded text-base text-white">Match pairs</button>
+                    <div class="hidden flex-1 gap-10 grid grid-cols-2 group-container h-full lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3">
+                        
+                    </div>
+                </div>
+                <div data-content="leaderboard" class="hidden flex-1">
+                    <div class="flex justify-center mb-4 text-center gap-5">
+                        <div class="grid grid-cols-2 gap-0 *:ring-1 *:ring-inset *:ring-gray-300 cursor-pointer">
+                            <label class="block has-[:checked]:ring-appred-400 has-[:checked]:text-white has-[:checked]:bg-appred-400 p-2 box-border">
+                                <input class="hidden" type="radio" name="leaderboard_type" value="all" checked>
+                                <span class="">All</span>
+                            </label>
+                            <label class="block has-[:checked]:ring-appred-400 has-[:checked]:text-white has-[:checked]:bg-appred-400 p-2 box-border">
+                                <input class="hidden" type="radio" name="leaderboard_type" value="per_team">
+                                <span class="">Per Team</span>
+                            </label>
+                        </div>
+          
+                        <input type="search" name="group_pair" id="" placeholder="Search">
+                    </div>
+                    <div class=>
+                        <div class="flex-1 gap-10 grid grid-cols-2 group-container h-full lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3">
+                        </div>
+                        <div class="hidden team-container">
+                            <table>
+                                <thead>
+                                    <th></th>
+                                    <th>Team name</th>
+                                    <th>Current profit</th>
+                                </thead>
+                                <tbody>
+                                </tbody>    
+                               
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <dialog id="pair_details" class="relative !border-none p-12 rounded-lg shadow-lg">
+            <button class="outline-none absolute bg-transparent border-none cursor-pointer flex hover:bg-gray-100 items-center justify-center p-2.5 right-3 rounded-md text-stone-600 top-3" type="button" data-dialog-action="close">
+                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"></path>
+            </svg></button>
+            <div class="dialog-body">
+                <table class="border-collapse price">
+                    <thead class="text-stone-400 text-xs">
+                        <tr class="*:px-2">
+                            <th></th>
+                            <th><span class="team_1_name">Team 1</span><span> price</span></th>
+                            <th><span class="team_2_name">Team 2</span><span> price</span></span></th>
+                            <th class="!border-none"></th>
+                            <th><span class="team_1_name">Team 1</span><span> profit</span></th>
+                            <th><span class="team_2_name">Team 2</span><span> profit</span></th>
+                        </tr>
+                    </thead>
+                    <tbody class="*:*:border *:*:border-gray-300 sm:*:*:px-4 *:*:border-solid sm:*:*:py-2 *:*:p-2">
+                     
+                    </tbody>
+                    <tfoot>
+                      
+                    </tfoot>
+                </table>
+            </div>
+            
+        </dialog>
+    </main>
+
+</body>
+
+</html>
