@@ -1,6 +1,6 @@
 
 $ = jQuery.noConflict();
-let app_api = 'https://script.google.com/macros/s/AKfycbztS8iY_30Qz-yO-nEW8QYLJutUFZmvuvlZ2Ek8pOYMC1WCDk73pJuiSyY9M5q1SXO4vg/exec'
+let app_api = 'https://script.google.com/macros/s/AKfycbzd1-6YNWr-SCfCf0aWdZBFLNnej2oVtRLFqketaAlOBOGwe0fR-42yT-l7emA2aE4J9Q/exec'
 let DB
 let TIMER
 $(document).ready(function () {
@@ -118,7 +118,7 @@ $(document).ready(function () {
 
                     updatePriceList(DB)
                     checkStage(DB)
-                    alert('update successfull')
+
                     $this[0].reset()
 
                         let prices = jsonParse(res.data.PRICE)
@@ -148,6 +148,9 @@ function syncApp(delay = 500){
         .then(r => r.json())
         .then(res => {
             
+            let oldData = JSON.stringify(DB)
+            let newData = JSON.stringify(res)
+            if(oldData == newData) return
             DB = res
             updatePriceList(DB)
             checkStage(res)
@@ -254,8 +257,8 @@ function updatePriceList(db){
             <tr class="*:border *:border-gray-300 sm*:px-5 *:border-solid sm*:py-1 *:p-2">
                 <td colspan="3" class="font-medium text-base text-center">TOTAL</td>
                 <td class="!border-none"></td>
-                <td class="${yellow_bg1}"><span class="currency">${team_total}</span></td>
-                <td class="${yellow_bg2}"><span class="currency">${vs_team_total}</span></td>
+                <td class="${yellow_bg1}"><span class="currency">${formatCurrency(team_total)}</span></td>
+                <td class="${yellow_bg2}"><span class="currency">${formatCurrency(vs_team_total)}</span></td>
             </tr>`
             $price_table.find('tfoot').html(total_template)
 
@@ -390,6 +393,9 @@ function updateTimer(startTime,currentMonth){
          if (remainingTime <= 0) {
              clearInterval(TIMER);
              $('.timer')?.text('Round Ended')
+             console.log('round ended')
+             $('#price-form [value="30"]').prop('checked',true)
+             $('#price-form').submit()
              return;
          }
          // Convert remaining time to minutes and seconds
@@ -400,4 +406,15 @@ function updateTimer(startTime,currentMonth){
          $('.current_month').text(currentMonth + 1)
         
      }, 1000);
+}
+
+function formatCurrency(num) {
+    let total = String(num)
+    if(total.length < 4){
+        total = `${total}K`
+    } else if(total.length >= 4){
+        total = `${total.slice(0,1)}.${total.slice(1)}M`
+    } 
+
+    return total
 }

@@ -24,8 +24,8 @@
             theme: {
                 extend: {
                     colors: {
-                        'appred': { '300' : '#B2265C','400': '#771A30' },
-                        'appgreen': { '200': '#CCEAEB', '300': '#479EAA' },
+                        'appred': { '400': '#771A30' },
+                        'appgreen': { '200': '#CCEAEB' },
                         'appblue': { '400': '#0C3A83' },
 
                     }
@@ -150,7 +150,7 @@ section#price_section form._loading > div {
                     <div class="flex flex-col form-items gap-3 w-full">
                         <p class="font-medium text-base capitalize mb-0">Nominate a company name</p>
                         <div class="form-field">
-                            <label class="*:bg-transparent *:border-none *:outline-none bg-stone-100 bg-white/50 flex m-1 overflow-hidden ring-0 rounded-lg shadow-black/50 shadow-inner">
+                            <label class="*:bg-transparent *:border-none *:outline-none bg-stone-100 flex m-1 ring-1 ring-stone-200 rounded-lg">
                                 <input class="w-full p-3" type="text" name="company_name">
                             </label>
                         </div>
@@ -159,25 +159,26 @@ section#price_section form._loading > div {
                         <p class="font-medium text-base capitalize mb-0">Enter your names</p>
                         <div class="form-field">
                             <p class="font-medium text-left text-xs capitalize mb-2">Team member 1</p>
-                            <label class="*:bg-transparent *:border-none *:outline-none bg-stone-100 bg-white/50 flex m-1 overflow-hidden ring-0 rounded-lg shadow-black/50 shadow-inner">
+                            <label class="*:bg-transparent *:border-none *:outline-none bg-stone-100 flex m-1 ring-1 ring-stone-200 rounded-lg">
                                 <input class="w-full p-3" type="text" name="team_member">
                             </label>
                         </div>
                         <div class="form-field">
                             <p class="font-medium text-left text-xs capitalize mb-2">Team member 2</p>
-                            <label class="*:bg-transparent *:border-none *:outline-none bg-stone-100 bg-white/50 flex m-1 overflow-hidden ring-0 rounded-lg shadow-black/50 shadow-inner">
+                            <label class="*:bg-transparent *:border-none *:outline-none bg-stone-100 flex m-1 ring-1 ring-stone-200 rounded-lg">
                                 <input class="w-full p-3" type="text" name="team_member">
                             </label>
                         </div>
                     </div>
-                    <button class="bg-gradient-to-r from-appred-400 to-appred-300 border-none capitalize font-bold min-w-40 px-7 py-2.5 rounded-xl text-base text-white tracking-wider" type="submit">Register</button>
+    
+                    <button class="bg-appblue-400 border-none capitalize font-bold min-w-40 px-7 py-2.5 rounded-xl text-base text-white tracking-wider" type="submit">Register</button>
                 </form>
             </section>
     
             <section id="price_section" class="hidden min-h-40 flex flex-1 flex-col gap-10">
                         <div class="flex flex-wrap gap-5 justify-center mt-10">
                             <table class="border-collapse price">
-                                <thead class="text-xs">
+                                <thead class="text-stone-400 text-xs">
                                     <tr class="*:px-2">
                                         <th></th>
                                         <th><span class="your_team_name">Your</span> <span>price</span></th>
@@ -197,7 +198,7 @@ section#price_section form._loading > div {
 
             
                         </div>
-                        <div class="text-white h-fit bg-appgreen-300 flex flex-row gap-5 items-center justify-center p-2 timer-wrapper">
+                        <div class="h-fit bg-appgreen-200 flex flex-row gap-5 items-center justify-center p-2 timer-wrapper">
                             <div class="flex flex-col">
                                 <span class="font-medium text-xs">Select Your Preferred Price for Month <span class="current_month">X</span></span> <span class="current"></span>
                                 <span></span>
@@ -224,7 +225,7 @@ section#price_section form._loading > div {
                                     </div>
                                 </div>
             
-                                <button class="bg-gradient-to-r from-appred-400 to-appred-300 border-none capitalize font-bold min-w-40 px-7 py-2.5 rounded-xl text-base text-white tracking-wider" type="submit">Submit price</button>
+                                <button class="bg-appblue-400 border-none capitalize font-bold min-w-40 px-7 py-2.5 rounded-xl text-base text-white tracking-wider" type="submit">Submit price</button>
                             </form>
                         </div>
 
