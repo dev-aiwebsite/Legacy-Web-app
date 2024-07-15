@@ -51,6 +51,7 @@ $(document).ready(function () {
             DB.TEAMS = res.db
             renderGroup(DB)
             renderPair(DB)
+            updateTeamData(DB)
         })
 
     })
