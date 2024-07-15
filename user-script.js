@@ -238,28 +238,28 @@ function updatePriceList(db){
 
             $price_table.find('tbody').append(price_template)
 
-            if(indx == 7) {
-                let team_total = team_profit.slice(0,8).reduce((a, b) => a + b, 0)
-                let vs_team_total = vs_team_profit.slice(0,8).reduce((a, b) => a + b, 0)
-                let yellow_bg1,yellow_bg2
-                if(team_total != vs_team_total){
-                    if(team_total > vs_team_total){
-                        yellow_bg1 = 'bg-yellow-300 text-black'
-                    } else {
-                        yellow_bg2 = 'bg-yellow-300 text-black'
-                    }
+            // append total
+            let team_total = team_profit.slice(0,8).reduce((a, b) => a + b, 0)
+            let vs_team_total = vs_team_profit.slice(0,8).reduce((a, b) => a + b, 0)
+            let yellow_bg1,yellow_bg2
+            if(team_total != vs_team_total){
+                if(team_total > vs_team_total){
+                    yellow_bg1 = 'bg-yellow-300 text-black'
+                } else {
+                    yellow_bg2 = 'bg-yellow-300 text-black'
                 }
-
-                let total_template = `
-                <tr class="*:border *:border-gray-300 sm*:px-5 *:border-solid sm*:py-1 *:p-2">
-                    <td colspan="3" class="font-medium text-base text-center">TOTAL</td>
-                    <td class="!border-none"></td>
-                    <td class="${yellow_bg1}"><span class="currency">${team_total}</span></td>
-                    <td class="${yellow_bg2}"><span class="currency">${vs_team_total}</span></td>
-                </tr>`
-            $price_table.find('tfoot').append(total_template)
-
             }
+
+            let total_template = `
+            <tr class="*:border *:border-gray-300 sm*:px-5 *:border-solid sm*:py-1 *:p-2">
+                <td colspan="3" class="font-medium text-base text-center">TOTAL</td>
+                <td class="!border-none"></td>
+                <td class="${yellow_bg1}"><span class="currency">${team_total}</span></td>
+                <td class="${yellow_bg2}"><span class="currency">${vs_team_total}</span></td>
+            </tr>`
+            $price_table.find('tfoot').html(total_template)
+
+            
 
 
         })
