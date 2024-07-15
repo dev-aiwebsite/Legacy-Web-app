@@ -211,7 +211,7 @@ function updatePriceList(db){
             </tr>`
 
 
-            if(indx == 3 || indx == 7){
+            if(indx == 2 || indx == 6){
                 let text = 'Negotiation'
           
                 let negoRowTemplate = `<tr class="" style=""><td colspan="100%" style="
