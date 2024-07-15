@@ -340,6 +340,7 @@ function syncApp(delay = 1000){
 
            
             updateTeamData(DB)
+            renderLeaderboardPerTeam(DB)
         })
     }
 
@@ -380,6 +381,7 @@ function renderGroup(db){
     if(!groups_with_pair.length) return
     $('.group-container').html("")
     console.log(groups_with_pair)
+
     groups_with_pair.forEach(group => {
         let $pair_container = $(`[data-pair="${group.PAIR}"]`)
         if($pair_container.length){
@@ -397,6 +399,7 @@ function renderGroup(db){
             $('[data-action="match_pair"]').addClass('hidden')
         }                      
     })
+
 }
 
 function jsonParse(json){
@@ -458,12 +461,40 @@ $(document).on('change', '[name="leaderboard_type"]', function(){
 })
 
 function renderLeaderboardPerTeam(db){
+    let $container = $('[data-content="leaderboard"] .team-container')
     let groups_with_pair = db.TEAMS.filter(i => i.PAIR != "")
     if(!groups_with_pair.length) return
     
+    let rendered_pairs = []
+    let items_to_render = []
+    groups_with_pair.forEach(group => {
+        let pair_number = group.PAIR
+        rendered_pairs.push(pair_number)
+        
+        let team_1_id = group.ID
+        let vs_team = groups_with_pair.find(i => i.PAIR == pair_number && i.ID != team_1_id)
+        let my_team_total = group?.PRICE ? JSON.parse(group.PRICE)?.slice(0,8).reduce((a, b) => Number(a) + Number(b), 0) : 0
+        let vs_team_total = vs_team?.PRICE ? JSON.parse(vs_team.PRICE)?.slice(0,8).reduce((a, b) => Number(a) + Number(b), 0) : 0
 
-    let team_1_total = team_1_profit_array.slice(0,8).reduce((a, b) => a + b, 0)
-    let team_2_total = team_2_profit_array.slice(0,8).reduce((a, b) => a + b, 0)
+        let template = `
+        <tr>
+        <td></td>
+            <td>${group.COMPANY}</td>
+            <td>${my_team_total}</td>
+        </tr>
+        <tr>
+        <td></td>
+            <td>${vs_team.COMPANY}</td>
+            <td>${vs_team_total}</td>
+        </tr>
+        `
+
+        items_to_render.push(template)
+
+    })
+
+    $container.find('tbody').html(items_to_render.join(' '))
+   
     
 
 }
