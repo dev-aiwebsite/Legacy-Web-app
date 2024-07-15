@@ -15,6 +15,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="admin-script.js"></script>
+    <script src="https://code.jquery.com/ui/1.14.0-beta.2/jquery-ui.min.js"></script>
+
     <script>
         tailwind.config = {
             corePlugins: {
@@ -125,37 +127,43 @@ body {
                 <div data-content="pairs" class="h-fit gap-10 grid grid-cols-2 md:grid-cols-5 sm:grid-cols-4">
 
                 </div>
-                <div data-content="groups" class="hidden flex flex-1 items-center justify-center">
-                    <button data-action="match_pair" type="button" class="bg-appred-400 border-none cursor-pointer font-medium hover:ring-1 hover:ring-appred-400 hover:ring-offset-2 min-w-60 px-6 py-3 rounded text-base text-white">Match pairs</button>
+                <div data-content="groups" class="hidden flex flex-1 flex-col gap-20 items-center justify-center">
+                    <button data-action="match_pair" type="button" class="bg-appred-400 border-none cursor-pointer font-medium hover:ring-1 hover:ring-appred-400 hover:ring-offset-2 min-w-60 px-6 py-3 rounded text-base text-white">Match Pairs</button>
                     <div class="hidden flex-1 gap-10 grid grid-cols-2 group-container h-full lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3">
                         
                     </div>
                 </div>
                 <div data-content="leaderboard" class="hidden flex-1">
                     <div class="flex justify-center mb-4 text-center gap-5">
-                        <div class="grid grid-cols-2 gap-0 *:ring-1 *:ring-inset *:ring-gray-300 cursor-pointer">
-                            <label class="block has-[:checked]:ring-appred-400 has-[:checked]:text-white has-[:checked]:bg-appred-400 p-2 box-border">
+                        <div class="grid text-sm font-medium grid-cols-2 gap-0 *:ring-1 *:ring-inset *:ring-gray-300 cursor-pointer">
+                            <label class="rounded-l-lg block has-[:checked]:ring-appred-400 has-[:checked]:text-white has-[:checked]:bg-appred-400 p-2 box-border">
                                 <input class="hidden" type="radio" name="leaderboard_type" value="all" checked>
                                 <span class="">All</span>
                             </label>
-                            <label class="block has-[:checked]:ring-appred-400 has-[:checked]:text-white has-[:checked]:bg-appred-400 p-2 box-border">
+                            <label class="rounded-r-lg block has-[:checked]:ring-appred-400 has-[:checked]:text-white has-[:checked]:bg-appred-400 p-2 box-border">
                                 <input class="hidden" type="radio" name="leaderboard_type" value="per_team">
                                 <span class="">Per Team</span>
                             </label>
                         </div>
           
-                        <input type="search" name="group_pair" id="" placeholder="Search">
+                        <label class="flex flex-row flex-nowrap gap-2 p-2 ring-1 ring-gray-400 rounded-lg has-[:focus-within]:ring-blue-400">
+                            <svg fill="#000000" height="1em" width="1em" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 52.966 52.966" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M51.704,51.273L36.845,35.82c3.79-3.801,6.138-9.041,6.138-14.82c0-11.58-9.42-21-21-21s-21,9.42-21,21s9.42,21,21,21 c5.083,0,9.748-1.817,13.384-4.832l14.895,15.491c0.196,0.205,0.458,0.307,0.721,0.307c0.25,0,0.499-0.093,0.693-0.279 C52.074,52.304,52.086,51.671,51.704,51.273z M21.983,40c-10.477,0-19-8.523-19-19s8.523-19,19-19s19,8.523,19,19 S32.459,40,21.983,40z"></path> </g></svg>
+                            <input class="!border-none !ring-0 !outline-none" type="search" name="group_pair" id="" placeholder="Search...">
+                        </label>
                     </div>
                     <div class=>
                         <div class="flex-1 gap-10 grid grid-cols-2 group-container h-full lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3">
                         </div>
-                        <div class="hidden team-container">
-                            <table>
-                                <thead>
+                        <div class="hidden team-container flex justify-center">
+                            <table class="border-collapse">
+                                <thead class="[&_th]:!p-4 !text-sm">
                                     <th></th>
                                     <th>Team name</th>
+                                    <th></th>
                                     <th>Current profit</th>
                                 </thead>
+                                <tbody class="[&_td]:!p-4 [&_td]:!text-center text-medium">
+                                </tbody>    
                                
                             </table>
                         </div>
@@ -163,14 +171,17 @@ body {
                 </div>
             </div>
         </section>
-        <dialog id="pair_details" class="relative !border-none p-12 rounded-lg shadow-lg">
+       
+    </main>
+    <dialog id="pair_details" class="bg-transparent border-none w-screen h-screen p-0 m-0 !max-w-[100vw] !max-h-[100vh]">
+        <div draggableEL class="bg-white relative !border-none p-12 rounded-lg shadow-lg w-fit cursor-grab top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
             <button class="outline-none absolute bg-transparent border-none cursor-pointer flex hover:bg-gray-100 items-center justify-center p-2.5 right-3 rounded-md text-stone-600 top-3" type="button" data-dialog-action="close">
                 <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"></path>
             </svg></button>
             <div class="dialog-body">
-                <table class="border-collapse price text-stone-500">
-                    <thead class="text-stone-400 text-xs">
+                <table class="border-collapse price">
+                    <thead class="text-xs">
                         <tr class="*:px-2">
                             <th></th>
                             <th><span class="team_1_name">Team 1</span><span> price</span></th>
@@ -181,16 +192,16 @@ body {
                         </tr>
                     </thead>
                     <tbody class="*:*:border *:*:border-gray-300 sm:*:*:px-4 *:*:border-solid sm:*:*:py-2 *:*:p-2">
-                     
+                    
                     </tbody>
                     <tfoot>
-                      
+                    
                     </tfoot>
                 </table>
             </div>
-            
-        </dialog>
-    </main>
+        </div>
+        
+    </dialog>
 
 </body>
 
