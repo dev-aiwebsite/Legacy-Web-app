@@ -1,7 +1,8 @@
 $ = jQuery.noConflict();
-let app_api = 'https://script.google.com/macros/s/AKfycbztS8iY_30Qz-yO-nEW8QYLJutUFZmvuvlZ2Ek8pOYMC1WCDk73pJuiSyY9M5q1SXO4vg/exec'
+let app_api = 'https://script.google.com/macros/s/AKfycbyqKdJBJngfgBGWOI2v8uCekHQlE8va9MO-1dwJLLqV3Q5fckn7ZuBrw4Jx3NcAID0ULg/exec'
 let team_price_profit = []
 let DB
+let syncAppInterval
 
 
 $(document).ready(function () {
@@ -26,6 +27,8 @@ $(document).ready(function () {
         console.log(res)
         renderGroup(DB)
         renderPair(DB)
+        updateTeamData(DB)
+        renderLeaderboardPerTeam(DB)
         syncApp(3000)
 
         let stage_to_start = res.STAGES.find(i => i.START != 'TRUE')?.STAGE || null
@@ -45,13 +48,17 @@ $(document).ready(function () {
         fetch(app_api + '?action=matchpair', {method: 'GET'})
         .then(r => r.json())
         .then(res => {
+            console.log(res)
             $this.removeClass('_loading')
             DB.TEAMS = res.db
             renderGroup(DB)
+            renderPair(DB)
+            updateTeamData(DB)
         })
 
     })
- 
+
+    initDraggable()
 })
 
 $(document).on('click', `[data-pair]`, function(){
@@ -60,6 +67,7 @@ $(document).on('click', `[data-pair]`, function(){
 
     $dialog_pair_details = $('#pair_details')
     $dialog_pair_details[0].showModal()
+    $('.dragging')?.removeAttr('style')
 })
 
 $(document).on('click', '[data-dialog-action="close"]', function(e){
@@ -67,16 +75,14 @@ $(document).on('click', '[data-dialog-action="close"]', function(e){
     $(this).closest('dialog')[0]?.close()
 })
 
-$(document).on('search', `input[name="group_pair"]`, function(e){
+$(document).on('input', `input[name="group_pair"]`, function(e){
     e.preventDefault()
     let to_search = $(this).val()
-    console.log('searching', to_search)
+
     $('[data-content="leaderboard"] [data-pair]').each(function(){
         let contents = $(this).text().toLowerCase()
         $(this).toggle(contents.includes(to_search.toLowerCase()))
     })
-
-    
     
 })
 
@@ -164,7 +170,7 @@ function renderPairData(db,pair_id){
             }
             $price_table.find('tbody').append(price_template)
 
-            if(indx == 7) {
+            // append total
                 let team_1_total = team_1_profit_array.slice(0,8).reduce((a, b) => a + b, 0)
                 let team_2_total = team_2_profit_array.slice(0,8).reduce((a, b) => a + b, 0)
                 let yellow_bg1,yellow_bg2
@@ -176,17 +182,17 @@ function renderPairData(db,pair_id){
                     }
                 }
 
+                
+        
+
                 let total_template = `
                 <tr class="*:border *:border-gray-300 sm*:px-5 *:border-solid sm*:py-1 *:p-2">
                     <td colspan="3" class="font-medium text-base text-center">TOTAL</td>
                     <td class="!border-none"></td>
-                    <td class="${yellow_bg1}"><span class="currency">${team_1_total}</span></td>
-                    <td class="${yellow_bg2}"><span class="currency">${team_2_total}</span></td>
+                    <td class="${yellow_bg1}"><span class="currency">${formatCurrency(team_1_total)}</span></td>
+                    <td class="${yellow_bg2}"><span class="currency">${formatCurrency(team_2_total)}</span></td>
                 </tr>`
-            $price_table.find('tfoot').append(total_template)
-
-            }
-
+            $price_table.find('tfoot').html(total_template)
 
         })
     }
@@ -255,8 +261,9 @@ function updateTeamData(db){
 
 
 
-            let team_1_total = team_1_profit_array.reduce((a, b) => a + b, 0)
-            let team_2_total = team_2_profit_array.reduce((a, b) => a + b, 0)
+            
+            let team_1_total = team_1_profit_array?.slice(0,8).reduce((a, b) => a + b, 0)
+            let team_2_total = team_2_profit_array?.slice(0,8).reduce((a, b) => a + b, 0)
 
             pair_data.teams[0]['team_profit'] = team_1_profit_array
             pair_data.teams[0]['team_total'] = team_1_total
@@ -301,11 +308,15 @@ function calculateProfit(a,b){
 }
 
 function syncApp(delay = 1000){
-
+    clearInterval(syncAppInterval)
     function fetchData(){
-        fetch(app_api + '?action=readall', {method: 'GET'})
+        let rand = Math.random()
+        fetch(`${app_api}?action=readall&rand=${rand}`, {method: 'GET'})
         .then(r => r.json())
         .then(res => {
+            let oldData = JSON.stringify(DB)
+            let newData = JSON.stringify(res)
+            if(oldData == newData) return
             DB = res
 
             let old_group = []
@@ -338,13 +349,14 @@ function syncApp(delay = 1000){
                 renderGroup(new_group)
             }
 
-           
             updateTeamData(DB)
             renderLeaderboardPerTeam(DB)
+            let stage_to_start = DB.STAGES.find(i => i.START != "TRUE")?.STAGE || null
+            renderStartButton(stage_to_start)
         })
     }
 
-    setInterval(fetchData, delay);
+    syncAppInterval = setInterval(fetchData, delay);
 }
 
 function isInArray(array,toCheck){
@@ -378,27 +390,26 @@ function renderPair(db){
 
 function renderGroup(db){
     let groups_with_pair = db.TEAMS.filter(i => i.PAIR != "")
+
     if(!groups_with_pair.length) return
+    $('button[data-action="match_pair"]').text('Match Again')
     $('.group-container').html("")
-    console.log(groups_with_pair)
-
+    
     groups_with_pair.forEach(group => {
-        let $pair_container = $(`[data-pair="${group.PAIR}"]`)
-        if($pair_container.length){
-            let template = ` <div data-team-id="${group.ID}" class="[&.winner]:bg-appred-300 [&.winner]:text-white bg-gray-100 capitalize font-medium p-2 ring-stone-100 rounded-lg text-sm">${group.COMPANY}</div>`
-            $pair_container.append(template);
-
+        let $pair_container = $('.group-container').find(`[data-pair="${group.PAIR}"]`)
+        
+        if(!$pair_container.length){
+            $pair_container = $(`<div data-pair="${group.PAIR}" class="h-fit cursor-pointer hover:ring-blue-200 hover:shadow-lg p-4 ring-1 ring-gray-200 rounded-xl shadow-md text-center">
+                <div data-team-id="${group.ID}" class="[&.winner]:bg-appred-300 [&.winner]:text-white bg-gray-100 capitalize font-medium p-2 ring-stone-100 rounded-lg text-sm">${group.COMPANY}</div><p class="font-medium my-1 text-stone-400 text-xs">Vs</p>
+                </div>`)    
+            $('.group-container').append($pair_container)
         } else {
-            let template = 
-                `<div data-pair="${group.PAIR}" class="h-fit cursor-pointer hover:ring-blue-200 hover:shadow-lg p-4 ring-1 ring-gray-200 rounded-xl shadow-md text-center">
-                <div data-team-id="${group.ID}" class="[&.winner]:bg-appred-300 [&.winner]:text-white bg-gray-100 capitalize font-medium p-2 ring-stone-100 rounded-lg text-sm">${group.COMPANY}</div>
-                <p class="font-medium my-1 text-stone-400 text-xs">Vs</p>
-               </div>`
-
-            $('.group-container').append(template).removeClass('hidden');
-            $('[data-action="match_pair"]').addClass('hidden')
-        }                      
+            $pair_container.append(` <div data-team-id="${group.ID}" class="[&.winner]:bg-appred-300 [&.winner]:text-white bg-gray-100 capitalize font-medium p-2 ring-stone-100 rounded-lg text-sm">${group.COMPANY}</div>`)
+        }        
+        
     })
+
+    $('.group-container').removeClass('hidden');
 
 }
 
@@ -414,9 +425,10 @@ function jsonParse(json){
 }
 
 $(document).on('click', '[data-start-stage]', function(e){
-    $('[data-start-stage]').addClass('_loading')
     e.preventDefault()
     let stage = $(this).attr('data-start-stage')
+    if(!stage) return
+    $('[data-start-stage]').addClass('_loading')
     let data = JSON.stringify({'START': "TRUE"})
 
     fetch(app_api + `?action=update&table=STAGES&data=${data}&id=${stage}`, {method: 'GET'})
@@ -438,12 +450,12 @@ $(document).on('click', '[data-start-stage]', function(e){
 function renderStartButton(stage_to_start){
     if(stage_to_start){
         $('[data-start-stage]')?.remove()
-        let startButton = `<button class="cursor-pointer bg-appred-400 border-none m-1 ml-auto px-4 ring-none rounded-xl text-base text-white" type="button" data-start-stage="${stage_to_start}">Start round ${stage_to_start}</button>`
-        $('.toolbar').append(startButton)
+        let startButton = `<button class="cursor-pointer bg-appred-400/90 hover:bg-appred-400 border-none m-1 ml-auto px-4 ring-none rounded-xl text-base text-white uppercase" type="button" data-start-stage="${stage_to_start}">Start round ${stage_to_start}</button>`
+        $('.toolbar').prepend(startButton)
     } else {
         $('[data-start-stage]')?.remove()
-        let startButton = `<button class="cursor-pointer bg-appred-400 border-none m-1 ml-auto px-4 ring-none rounded-xl text-base text-white" type="button">No more rounds to start</button>`
-        $('.toolbar').append(startButton)
+        let startButton = `<button data-start-stage class="pointer-events-none cursor-pointer bg-appred-400/90 hover:bg-appred-400 border-none m-1 ml-auto px-4 ring-none rounded-xl text-base text-white uppercase" type="button">No more rounds to start</button>`
+        $('.toolbar').prepend(startButton)
     }
 }
 
@@ -467,34 +479,127 @@ function renderLeaderboardPerTeam(db){
     
     let rendered_pairs = []
     let items_to_render = []
+
     groups_with_pair.forEach(group => {
         let pair_number = group.PAIR
-        rendered_pairs.push(pair_number)
-        
+        if(rendered_pairs.includes(pair_number)) return
         let team_1_id = group.ID
         let vs_team = groups_with_pair.find(i => i.PAIR == pair_number && i.ID != team_1_id)
-        let my_team_total = group?.PRICE ? JSON.parse(group.PRICE)?.slice(0,8).reduce((a, b) => Number(a) + Number(b), 0) : 0
-        let vs_team_total = vs_team?.PRICE ? JSON.parse(vs_team.PRICE)?.slice(0,8).reduce((a, b) => Number(a) + Number(b), 0) : 0
+        let my_team_total = group?.PRICE ? JSON.parse(group.PRICE)?.slice(0,8) : []
+        let vs_team_total = vs_team?.PRICE ? JSON.parse(vs_team.PRICE)?.slice(0,8) :  []
 
-        let template = `
-        <tr>
-        <td></td>
-            <td>${group.COMPANY}</td>
-            <td>${my_team_total}</td>
-        </tr>
-        <tr>
-        <td></td>
-            <td>${vs_team.COMPANY}</td>
-            <td>${vs_team_total}</td>
-        </tr>
-        `
+        let my_team_total_profit = []
+        let vs_team_total_profit = []
+        
+        my_team_total.forEach((price,index)=> {
+        
+            let profit = calculateProfit(price,vs_team_total[index])
+            my_team_total_profit.push(profit[0])
+            vs_team_total_profit.push(profit[1])
+        })
+        
+    
+        let item1 = {
+            company: group.COMPANY,
+            total: my_team_total_profit.reduce((a, b) => Number(a) + Number(b), 0),
+            pair: pair_number,
+            team_id: team_1_id
+        }
+        
+        let item2 = {
+            company: vs_team.COMPANY,
+            total: vs_team_total_profit.reduce((a, b) => Number(a) + Number(b), 0),
+            pair: pair_number,
+            team_id: vs_team.ID
+        }
+        
 
-        items_to_render.push(template)
+        items_to_render.push(item1,item2)
+        rendered_pairs.push(pair_number)
 
     })
 
-    $container.find('tbody').html(items_to_render.join(' '))
-   
-    
+    items_to_render.sort((a,b) => b.total - a.total)
+    items_to_render = items_to_render.map((v,i)=>{
+        let currentSearchQuery = $(`[type="search"][name="group_pair"]`).val()
+        let style = ""
 
+        if(currentSearchQuery != "" && !JSON.stringify(v).toLowerCase().includes(currentSearchQuery)){
+            style = 'display:none'
+        }
+
+        let template = `
+        <tr data-pair="${v.pair}" data-team-id="${v.team_id}" style="${style}">
+        <td class="!border-none">${i + 1}</td>
+            <td class="min-w-[200px]">${v.company}</td>
+            <td class="!border-none w-[10px]"></td>
+            <td class="min-w-[200px]"><span class="currency">${formatCurrency(v.total)}<span></td>
+        </tr>
+        `
+        return template
+    })
+
+    $container.find('tbody').html(items_to_render.join(' '))
 }
+
+
+function initDraggable(){
+    const draggableDiv = $('[draggableEL]')[0];
+
+    let isDragging = false;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    draggableDiv.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    offsetX = e.clientX - draggableDiv.offsetLeft;
+    offsetY = e.clientY - draggableDiv.offsetTop;
+        e.target.closest('[draggableEl]').classList.remove('cursor-grab')
+        e.target.closest('[draggableEl]').classList.add('cursor-grabbing')
+        e.target.closest('[draggableEl]').classList.add('dragging')
+    });
+
+    document.addEventListener('mousemove', (e) => {
+    if (isDragging) {
+        draggableDiv.style.left = `${e.clientX - offsetX}px`;
+        draggableDiv.style.top = `${e.clientY - offsetY}px`;
+    }
+    });
+
+    document.addEventListener('mouseup', (e) => {
+        isDragging = false;
+        $('.dragging').removeClass('cursor-grabbing')
+        $('.dragging').addClass('cursor-grab')
+        $('.dragging').removeClass('dragging')
+    });
+}
+
+function formatCurrency(num) {
+    let total = String(num)
+    if(total.length < 4){
+        total = `${total}K`
+    } else if(total.length >= 4){
+        total = `${total.slice(0,1)}.${total.slice(1)}M`
+    } 
+
+    return total
+}
+
+$(document).on('click', '[data-reset-app]', function(e){
+    e.preventDefault()
+    if(!confirm('Are you sure you want to reset the app?')) return
+    $(this).addClass('_loading')
+    fetch(app_api + '?action=reset', {method: 'GET'})
+    .then(r => r.json())
+    .then(res => {
+        if(res.success){
+            location.reload()
+        } else {
+            alert(res.message)
+        }
+
+
+    }).catch(err => {
+        alert(err)
+    })
+})
