@@ -281,10 +281,10 @@ function checkStage(db){
         let rowsHiddenIndex = 0
         if(current_stage == 1){
             mustBeLengthOfPrice = 3
-            rowsHiddenIndex = 4
+            rowsHiddenIndex = 6
         } else if(current_stage == 2){
             mustBeLengthOfPrice = 7
-            rowsHiddenIndex = 9
+            rowsHiddenIndex = 11
         } else if(current_stage == 3){
             mustBeLengthOfPrice = 8
             rowsHiddenIndex = 12
