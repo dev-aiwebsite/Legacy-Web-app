@@ -210,7 +210,7 @@ function updatePriceList(db){
                 ${profit_template}
             </tr>`
 
-
+            $price_table.find('tbody').append(price_template)
             if(indx == 2 || indx == 6){
                 let text = 'Negotiation'
           
@@ -236,7 +236,7 @@ function updatePriceList(db){
                 $price_table.find('tbody').append(negoRowTemplate)
             }
 
-            $price_table.find('tbody').append(price_template)
+          
 
             // append total
             let team_total = team_profit.slice(0,8).reduce((a, b) => a + b, 0)
