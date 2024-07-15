@@ -535,8 +535,9 @@ function initDraggable(){
     isDragging = true;
     offsetX = e.clientX - draggableDiv.offsetLeft;
     offsetY = e.clientY - draggableDiv.offsetTop;
-    e.target.closest('[draggableEl]').classList.remove('cursor-grab')
-    e.target.closest('[draggableEl]').classList.add('cursor-grabbing')
+        e.target.closest('[draggableEl]').classList.remove('cursor-grab')
+        e.target.closest('[draggableEl]').classList.add('cursor-grabbing')
+        e.target.closest('[draggableEl]').classList.add('dragging')
     });
 
     document.addEventListener('mousemove', (e) => {
@@ -547,8 +548,8 @@ function initDraggable(){
     });
 
     document.addEventListener('mouseup', (e) => {
-    isDragging = false;
-        e.target.closest('[draggableEl]')?.classList.remove('cursor-grab')
-        e.target.closest('[draggableEl]')?.classList.add('cursor-grabbing')
+        isDragging = false;
+        $('.dragging').removeClass('cursor-grabbing')
+        $('.dragging').addClass('cursor-grab')
     });
 }
