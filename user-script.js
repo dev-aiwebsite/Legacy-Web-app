@@ -122,7 +122,7 @@ $(document).ready(function () {
 
                         let prices = jsonParse(res.data.PRICE)
                         if(prices.length) {
-                        if(prices.length == 3 || prices.length == 7) {
+                        if(prices.length == 3 || prices.length >= 7) {
                             $this.addClass('_loading')
                             clearInterval(TIMER)
                         }
@@ -266,8 +266,7 @@ function updatePriceList(db){
 
 
         })
-    }
-    
+    } 
 }
 
 function checkStage(db){
@@ -313,6 +312,9 @@ function checkStage(db){
         } else {
             $('#price_section form')?.addClass('_loading')
             $('.timer-wrapper').addClass('hidden')
+            if(entryCount == 8){
+                $('#price_section form')?.addClass('end_of_match')
+            }
         }
 
         // hide other data for stage that's not open
