@@ -15,7 +15,6 @@ $(document).ready(function () {
         let team_data = DB.TEAMS.find(i => i.ID == team_id)
 
         $('.participant').removeClass('_loading')
-        console.log(team_data)
         
         if(team_data){
             $('#price_section').removeClass('hidden')
@@ -125,6 +124,7 @@ $(document).ready(function () {
                         if(prices.length) {
                         if(prices.length == 3 || prices.length == 7) {
                             $this.addClass('_loading')
+                            clearInterval(TIMER)
                         }
                     }
 
@@ -309,6 +309,7 @@ function checkStage(db){
             }
     
             updateTimer(startTime,entryCount)
+
         } else {
             $('#price_section form')?.addClass('_loading')
             $('.timer-wrapper').addClass('hidden')
