@@ -271,6 +271,8 @@ function updateTeamData(db){
             pair_data.teams[1]['team_profit'] = team_2_profit_array
             pair_data.teams[1]['team_total'] = team_2_total
 
+            
+            $(`[data-pair="${pair_id}"] .winner`)?.removeClass('winner')
             if(team_1_total != team_2_total){
                 if(team_1_total > team_2_total){
                     pair_data['winner'] = team_1.ID
