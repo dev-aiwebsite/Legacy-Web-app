@@ -495,6 +495,8 @@ function renderLeaderboardPerTeam(db){
         
         my_team_total.forEach((price,index)=> {
         
+            if(!price || !vs_team_total[index]) return
+
             let profit = calculateProfit(price,vs_team_total[index])
             my_team_total_profit.push(profit[0])
             vs_team_total_profit.push(profit[1])
