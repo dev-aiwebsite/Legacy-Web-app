@@ -1,14 +1,19 @@
 
 $ = jQuery.noConflict();
-let app_api = 'https://script.google.com/macros/s/AKfycbzd1-6YNWr-SCfCf0aWdZBFLNnej2oVtRLFqketaAlOBOGwe0fR-42yT-l7emA2aE4J9Q/exec'
+let app_api = 'https://script.google.com/macros/s/AKfycbwZ82GZp4OtA8NiJwrLtNTCEE8Kb59GVeswsKGBuDT_MUF1A4UVMCQoRGsWf51zfEj-dQ/exec'
 let DB
-let TIMER
+let TIMER = {'currentMonth':0}
+let STARTUP = true
+let REMAINING_TIME = 5000
+let CURRENT_MONTH = 1
+
+const APP_COLORS_ARRAY = ["#771a30","#0a0c52","#b2265c","#77378d","#0c3a83","#479eaa","#5c92b1"]
+
 $(document).ready(function () {
 
     fetch(app_api + '?action=readall', {method: 'GET'})
     .then(r => r.json())
     .then(res => {
-        console.log(res)
         DB = res
         
         let team_id = localStorage['lwa_team_id']
@@ -36,9 +41,9 @@ $(document).ready(function () {
             $('[data-content]').addClass('hidden')
             $content_container.removeClass('hidden')                
         })
-
-        updatePriceList(DB)
+        
         checkStage(res)
+        updatePriceList(DB)
         syncApp(5000)
         
     })
@@ -58,7 +63,9 @@ $(document).ready(function () {
         console.log('registration triggered')
         let data = {
             'COMPANY': company,
-            'PARTICIPANTS': participants}
+            'PARTICIPANTS': participants,
+            'COLOR': `${getRandomColor()}`,
+        }
 
         let query = new URL(app_api)
         query.searchParams.append('action', 'insert')
@@ -98,7 +105,7 @@ $(document).ready(function () {
         let price = $this.find('[name="price"]:checked').val()
 
         let data = {
-            'PRICE': price
+            'PRICE': [price]
         }
 
         let query = new URL(app_api)
@@ -108,34 +115,24 @@ $(document).ready(function () {
         query.searchParams.append('data', JSON.stringify(data))
 
         fetch(query, { method: 'GET' })
-            .then(r => r.json())
-            .then(res => {
-                console.log(res)
-                DB.TEAMS = res.db
-                if (res.success) {
-                    localStorage['timerStartTime'] = new Date()
+        .then(r => r.json())
+        .then(res => {
+            console.log(res)
+            DB.TEAMS = res.db
+            if (res.success) {
+                updatePriceList(DB)
+                checkStage(DB)
+                $this[0].reset()
+                $this.addClass('_loading')
 
-                    updatePriceList(DB)
-                    checkStage(DB)
-
-                    $this[0].reset()
-
-                        let prices = jsonParse(res.data.PRICE)
-                        if(prices.length) {
-                        if(prices.length == 3 || prices.length >= 7) {
-                            $this.addClass('_loading')
-                            clearInterval(TIMER)
-                        }
-                    }
-
-                } else {
-                    alert('something went wrong')
-                }
-                $submit_btn.removeClass('_loading')
-            })
-            .catch(err => {
-                alert(err)
-            })
+            } else {
+                alert('something went wrong')
+            }
+            $submit_btn.removeClass('_loading')
+        })
+        .catch(err => {
+            alert(err)
+        })
 
     })
 
@@ -143,17 +140,18 @@ $(document).ready(function () {
 
 function syncApp(delay = 500){
 
+    console.log('syncApp called')
     function fetchData(){
         fetch(app_api + '?action=readall', {method: 'GET'})
         .then(r => r.json())
         .then(res => {
-            
             let oldData = JSON.stringify(DB)
             let newData = JSON.stringify(res)
-            if(oldData == newData) return
             DB = res
-            updatePriceList(DB)
             checkStage(res)
+            if(oldData == newData) return
+            updatePriceList(DB)
+            
         })
     }
 
@@ -273,12 +271,45 @@ function checkStage(db){
     let stages = db.STAGES
     let last_opened_stage = stages.findLast(i => i.START == 'TRUE')
     let current_stage = last_opened_stage?.STAGE
-    let team_id = localStorage['lwa_team_id']
-    let price = jsonParse(db.TEAMS.find(i => i.ID == team_id)?.PRICE)
-    
+    let startTime = new Date(last_opened_stage?.TIMESTAMP)?.getTime()
+
     if(current_stage){
+        let team_id = localStorage['lwa_team_id']
+        let price = jsonParse(db.TEAMS.find(i => i.ID == team_id)?.PRICE) 
+        price = price ? price : []
+
+        let prices = db.TEAMS.map(i => {
+            if(i.PRICE == "") return []
+            return jsonParse(i.PRICE)
+        })
+        let maxLength = getMaxLength(prices)
+        let allAreEqual = prices.every(i => i.length == price.length)
+        let currentMonth = Number(CURRENT_MONTH)
+
+
+        if(STARTUP){
+            
+            currentMonth = Number(localStorage['currentMonth']) || 1
+            if(currentMonth > maxLength){
+                currentMonth = price?.length ? price?.length + 1 : 1
+            }
+            
+        }
+        
+        let valid = false
+        if(price?.length < currentMonth){
+                valid = true       
+        }
+    
+        console.log(prices)
+        console.log(currentMonth, 'currentmonth')
+        console.log(allAreEqual, 'allareequal')
+        console.log(maxLength, 'maxlength')
+        console.log(valid, 'valid')
+
         $('.timer-wrapper.hidden').removeClass('hidden')
-        let startTime = new Date(last_opened_stage.TIMESTAMP).getTime()
+        
+        
         let mustBeLengthOfPrice = 0
         let rowsHiddenIndex = 0
         if(current_stage == 1){
@@ -292,34 +323,30 @@ function checkStage(db){
             rowsHiddenIndex = 12
         }
 
+
         let entryCount = price?.length || 0
         
         entryCount = entryCount<= 8 ? entryCount : 8
+        console.log(entryCount,mustBeLengthOfPrice)
         
-        
-        if( entryCount < mustBeLengthOfPrice){
+        if( entryCount < mustBeLengthOfPrice && valid ){
+            console.log('valid')
             $('#price_section form')?.removeClass('_loading')
             $('.before_start_loader').addClass('hidden')
-            localStorage['currentMonth'] = Number(entryCount)
-            
-            if(localStorage['timerStartTime']){
-                let localStartTime = new Date(localStorage['timerStartTime']).getTime()
-                startTime = localStartTime > startTime ? localStartTime : startTime
-            }
-    
-            updateTimer(startTime,entryCount)
 
         } else {
             $('#price_section form')?.addClass('_loading')
-            $('.timer-wrapper').addClass('hidden')
             if(entryCount == 8){
+                $('.timer-wrapper').addClass('hidden')
                 $('#price_section form')?.addClass('end_of_match')
             }
         }
 
+        updateCountDownTimer(startTime,currentMonth)
+
         // hide other data for stage that's not open
 
-        $('#price_section').find('tr').each(function(indx,e){
+        $('#price_section tr').each(function(indx,e){
             
             if(indx >= rowsHiddenIndex){
                 $(this).addClass('hidden')
@@ -327,9 +354,6 @@ function checkStage(db){
                 $(this).removeClass('hidden')
             }
         })
-
- 
-
     
     } else {
         $('#price_section tr').addClass('hidden')
@@ -375,40 +399,67 @@ function jsonParse(json){
 
 }
 
-function updateTimer(startTime,currentMonth){
-    clearInterval(TIMER);
-     // Duration of the timer in milliseconds (4 minutes)
-     let timerDuration = 4 * 60 * 1000;
-     if(currentMonth == 0){
-        timerDuration = 8 * 60 * 1000;
-     }
+function updateCountDownTimer(startTime,currentMonth){
+   
+    let timerDuration = 4 * 60 * 1000
+
+    if(currentMonth == 1){
+        timerDuration = 8 * 60 * 1000
+
+    } else if(currentMonth < 4){
+        let additionalTime = 4 * 60 * 1000 * currentMonth;
+        timerDuration = timerDuration + additionalTime
+
+    } else if(currentMonth > 4 && currentMonth < 8){
+        timerDuration = 4 * 60 * 1000 * (currentMonth - 3);
+
+    }
 
      // Calculate the end time
      const endTime = startTime + timerDuration;
-     
-     // Update the timer every second
-      TIMER = setInterval(() => {
+     CURRENT_MONTH = currentMonth
+     localStorage['currentMonth'] = CURRENT_MONTH
+    
+     console.log(endTime, 'endtime')
+    //  if(TIMER['currentMonth'] == currentMonth) return
+    //     if(TIMER?.interval_function){
+    //         clearInterval(TIMER.interval_function);
+    //     }
+
+    clearInterval(TIMER.interval_function);
+      TIMER = {
+        'currentMonth':currentMonth,
+        'interval_function': setInterval(() => {
+        // Update the timer every second 
          // Calculate the remaining time
          const now = Date.now();
-         const remainingTime = endTime - now;
+         REMAINING_TIME = endTime - now;
 
          // If the remaining time is less than or equal to 0, stop the timer
-         if (remainingTime <= 0) {
-             clearInterval(TIMER);
+         if (REMAINING_TIME <= 0) {
+             clearInterval(TIMER.interval_function);
+             let $priceForm = $('#price-form')
+             CURRENT_MONTH = CURRENT_MONTH + 1
+             localStorage['currentMonth'] = CURRENT_MONTH
+             if($priceForm.hasClass('_loading')) return
+
+             $priceForm.addClass('_loading')
              $('.timer')?.text('Round Ended')
-             console.log('round ended')
              $('#price-form [value="30"]').prop('checked',true)
              $('#price-form').submit()
-             return;
+             return
          }
          // Convert remaining time to minutes and seconds
-         const minutes = Math.floor(remainingTime / 1000 / 60);
-         const seconds = Math.floor((remainingTime / 1000) % 60).toString().padStart(2, '0');
+         const minutes = Math.floor(REMAINING_TIME / 1000 / 60);
+         const seconds = Math.floor((REMAINING_TIME / 1000) % 60).toString().padStart(2, '0');
          // Display the remaining time
          $('.timer')?.text(`${minutes}:${seconds}`)
-         $('.current_month').text(currentMonth + 1)
+         $('.current_month').text(currentMonth)
         
-     }, 1000);
+     }, 1000)
+    }
+     
+ 
 }
 
 function formatCurrency(num) {
@@ -420,4 +471,19 @@ function formatCurrency(num) {
     } 
 
     return total
+}
+
+function getMaxLength(arrayOfArrays) {
+    if (arrayOfArrays.length === 0) return 0;
+    arrayOfArrays.sort((a, b) => b.length - a.length);
+    return arrayOfArrays[0].length;
+  }
+
+  function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
 }
