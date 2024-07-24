@@ -531,11 +531,11 @@ function renderLeaderboardPerTeam(db){
         }
 
         let template = `
-        <tr data-pair="${v.pair}" data-team-id="${v.team_id}" style="${style}">
+        <tr class="group" data-pair="${v.pair}" data-team-id="${v.team_id}" style="${style}">
         <td class="!border-none">${i + 1}</td>
-            <td class="min-w-[200px]">${v.company}</td>
+            <td class="group-hover:bg-appred-300/10 min-w-[200px]">${v.company}</td>
             <td class="!border-none w-[10px]"></td>
-            <td class="min-w-[200px]"><span class="currency">${formatCurrency(v.total)}<span></td>
+            <td class="group-hover:bg-appred-300/10 min-w-[200px]"><span class="currency">${formatCurrency(v.total)}<span></td>
         </tr>
         `
         return template
