@@ -553,19 +553,26 @@ function initDraggable(){
     let offsetY = 0;
 
     draggableDiv.addEventListener('mousedown', (e) => {
-    isDragging = true;
-    offsetX = e.clientX - draggableDiv.offsetLeft;
-    offsetY = e.clientY - draggableDiv.offsetTop;
-        e.target.closest('[draggableEl]').classList.remove('cursor-grab')
-        e.target.closest('[draggableEl]').classList.add('cursor-grabbing')
-        e.target.closest('[draggableEl]').classList.add('dragging')
+        if(e.target.closest('[data-dialog-action="close"]')) return
+
+        isDragging = true;
+        let draggableEl = e.target.closest('[draggableEl]');
+
+        offsetX = e.clientX - draggableEl.offsetLeft;
+        offsetY = e.clientY - draggableEl.offsetTop;
+
+        draggableEl.classList.remove('cursor-grab')
+        draggableEl.classList.add('cursor-grabbing')
+        draggableEl.classList.add('dragging')
     });
 
     document.addEventListener('mousemove', (e) => {
-    if (isDragging) {
-        draggableDiv.style.left = `${e.clientX - offsetX}px`;
-        draggableDiv.style.top = `${e.clientY - offsetY}px`;
-    }
+        const draggingEl = document.querySelector('.dragging');
+    
+        if (isDragging && draggingEl) {
+            draggingEl.style.left = `${e.clientX - offsetX}px`;
+            draggingEl.style.top = `${e.clientY - offsetY}px`;
+        }
     });
 
     document.addEventListener('mouseup', (e) => {
