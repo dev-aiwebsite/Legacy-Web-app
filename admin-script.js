@@ -1,9 +1,9 @@
 $ = jQuery.noConflict();
-let app_api = 'https://script.google.com/macros/s/AKfycbyqKdJBJngfgBGWOI2v8uCekHQlE8va9MO-1dwJLLqV3Q5fckn7ZuBrw4Jx3NcAID0ULg/exec'
+let app_api = 'https://script.google.com/macros/s/AKfycbwZ82GZp4OtA8NiJwrLtNTCEE8Kb59GVeswsKGBuDT_MUF1A4UVMCQoRGsWf51zfEj-dQ/exec'
 let team_price_profit = []
 let DB
 let syncAppInterval
-
+const APP_COLORS_ARRAY = ["#771a30","#0a0c52","#b2265c","#77378d","#0c3a83","#479eaa","#5c92b1"]
 
 $(document).ready(function () {
     let $content_wrapper = $('#content-wrapper');
@@ -367,13 +367,14 @@ function isInArray(array,toCheck){
 }
 
 function renderPair(db){     
-    $('[data-content="pairs"]').html("");  
+    $('[data-content="pairs"] > div').html("");  
     if(!db.TEAMS.length) return
     db.TEAMS.forEach(group => {
         let participants = jsonParse(group.PARTICIPANTS)
         if(!participants) return
 
-        let template = ` <div data-pair class="*:flex *:h-10 isolate relative w-full">
+        
+        let template = `<div data-pair class="*:flex *:h-10 isolate relative w-full" style="--color: ${group.COLOR}; color:var(--color)">
             <div class="bg-white capitalize font-medium items-center pl-1 relative sm:text-lg text-sm z-10">${group.COMPANY}</div>
             <div
                 class="-translate-x-4 -translate-y-1/2 absolute border-dashed border-px border-stone-400 top-1/2 w-5">
@@ -386,7 +387,7 @@ function renderPair(db){
             </div>
         </div>`
 
-        $('[data-content="pairs"]').append(template);
+        $('[data-content="pairs"] > div').append(template);
     })  
 }
 
@@ -402,11 +403,11 @@ function renderGroup(db){
         
         if(!$pair_container.length){
             $pair_container = $(`<div data-pair="${group.PAIR}" class="h-fit cursor-pointer hover:ring-blue-200 hover:shadow-lg p-4 ring-1 ring-gray-200 rounded-xl shadow-md text-center">
-                <div data-team-id="${group.ID}" class="[&.winner]:bg-appred-300 [&.winner]:text-white bg-gray-100 capitalize font-medium p-2 ring-stone-100 rounded-lg text-sm">${group.COMPANY}</div><p class="font-medium my-1 text-stone-400 text-xs">Vs</p>
+                <div style="background-color:${group.COLOR}" data-team-id="${group.ID}" class="[&.winner]:bg-appred-300 [&.winner]:text-white bg-gray-100 capitalize font-medium p-2 ring-stone-100 rounded-lg text-sm">${group.COMPANY}</div><p class="font-medium my-1 text-stone-400 text-xs">Vs</p>
                 </div>`)    
             $('.group-container').append($pair_container)
         } else {
-            $pair_container.append(` <div data-team-id="${group.ID}" class="[&.winner]:bg-appred-300 [&.winner]:text-white bg-gray-100 capitalize font-medium p-2 ring-stone-100 rounded-lg text-sm">${group.COMPANY}</div>`)
+            $pair_container.append(` <div style="background-color:${group.COLOR}" data-team-id="${group.ID}" class="[&.winner]:bg-appred-300 [&.winner]:text-white bg-gray-100 capitalize font-medium p-2 ring-stone-100 rounded-lg text-sm">${group.COMPANY}</div>`)
         }        
         
     })
@@ -614,3 +615,55 @@ $(document).on('click', '[data-reset-app]', function(e){
         alert(err)
     })
 })
+
+
+function hexToHSL(hex) {
+    // Convert hex to RGB
+    let r = parseInt(hex.slice(1, 3), 16) / 255;
+    let g = parseInt(hex.slice(3, 5), 16) / 255;
+    let b = parseInt(hex.slice(5, 7), 16) / 255;
+
+    // Find min and max values of RGB
+    let max = Math.max(r, g, b), min = Math.min(r, g, b);
+    let h, s, l = (max + min) / 2;
+
+    if (max === min) {
+        h = s = 0; // achromatic
+    } else {
+        let d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+
+        switch (max) {
+            case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+            case g: h = (b - r) / d + 2; break;
+            case b: h = (r - g) / d + 4; break;
+        }
+
+        h /= 6;
+    }
+
+    h = Math.floor(h * 360);
+    s = Math.floor(s * 100);
+    l = Math.floor(l * 100);
+
+    return `hsl(${h}, ${s}%, ${l}%)`;
+}
+
+// Convert APP_COLORS_ARRAY to HSL array
+const APP_HSL_COLORS_ARRAY = APP_COLORS_ARRAY.map(hexToHSL);
+
+// Function to get a random color from the HSL array
+function getRandomHSLColorFromArray() {
+    const randomIndex = Math.floor(Math.random() * APP_HSL_COLORS_ARRAY.length);
+    return APP_HSL_COLORS_ARRAY[randomIndex];
+}
+
+
+function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
