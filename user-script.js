@@ -286,7 +286,6 @@ function checkStage(db){
         let allAreEqual = prices.every(i => i.length == price.length)
         let currentMonth = Number(CURRENT_MONTH)
 
-
         if(STARTUP){
             
             currentMonth = Number(localStorage['currentMonth']) || 1
