@@ -403,11 +403,11 @@ function renderGroup(db){
         
         if(!$pair_container.length){
             $pair_container = $(`<div data-pair="${group.PAIR}" class="h-fit cursor-pointer hover:ring-blue-200 hover:shadow-lg p-4 ring-1 ring-gray-200 rounded-xl shadow-md text-center">
-                <div style="background-color:${group.COLOR}" data-team-id="${group.ID}" class="[&.winner]:bg-appred-300 [&.winner]:text-white bg-gray-100 capitalize font-medium p-2 ring-stone-100 rounded-lg text-sm">${group.COMPANY}</div><p class="font-medium my-1 text-stone-400 text-xs">Vs</p>
+                <div style="--color:${group.COLOR}" data-team-id="${group.ID}" class="[&.winner]:text-white bg-gray-100 capitalize font-medium p-2 ring-stone-100 rounded-lg text-sm">${group.COMPANY}</div><p class="font-medium my-1 text-stone-400 text-xs">Vs</p>
                 </div>`)    
             $('.group-container').append($pair_container)
         } else {
-            $pair_container.append(` <div style="background-color:${group.COLOR}" data-team-id="${group.ID}" class="[&.winner]:bg-appred-300 [&.winner]:text-white bg-gray-100 capitalize font-medium p-2 ring-stone-100 rounded-lg text-sm">${group.COMPANY}</div>`)
+            $pair_container.append(` <div style="--color:${group.COLOR}" data-team-id="${group.ID}" class="[&.winner]:text-white bg-gray-100 capitalize font-medium p-2 ring-stone-100 rounded-lg text-sm">${group.COMPANY}</div>`)
         }        
         
     })
